@@ -50,21 +50,22 @@ def get_item(file, key):
     return normalize_bool(file[key])
 
 
-def print_equal_item(first_file, second_file, key):
+def is_equal_item(first_file, second_file, key):
     if key in first_file and key in second_file:
         if get_item(first_file, key) == get_item(second_file, key):
-            print(f'     {key}: {get_item(first_file, key)}')
             return True
 
 
-def print_item_from_first_file(key):
-    first_file = get_first_file()
-    print(f'  -  {key}: {get_item(first_file, key)}')
+def get_equal_item(key, file=get_first_file()):
+    return f'     {key}: {get_item(file, key)}'
 
 
-def print_item_from_second_file(key):
-    second_file = get_second_file()
-    print(f'  +  {key}: {get_item(second_file, key)}')
+def get_item_from_first_file(key, file=get_first_file()):
+    return f'  -  {key}: {get_item(file, key)}'
+
+
+def get_item_from_second_file(key, file=get_second_file()):
+    return f'  +  {key}: {get_item(file, key)}'
 
 
 def generate_diff():
@@ -74,18 +75,45 @@ def generate_diff():
     )
     parameter_counter = Counter(all_keys)
 
-    print('{')
+    parameters = ['{']
+
     for key, value in parameter_counter.items():
 
         if value == 2:
-            if print_equal_item(first_file, second_file, key):
+            if is_equal_item(first_file, second_file, key):
+                parameters.append((get_equal_item(key)))
                 continue
-            print_item_from_first_file(key)
-            print_item_from_second_file(key)
+            parameters.append(get_item_from_first_file(key))
+            parameters.append(get_item_from_second_file(key))
 
         elif key in first_file:
-            print_item_from_first_file(key)
+            parameters.append(get_item_from_first_file(key))
 
         else:
-            print_item_from_second_file(key)
-    print('}')
+            parameters.append(get_item_from_second_file(key))
+
+    parameters.append('}')
+
+    final_diff = '\n'.join(parameters)
+
+    print(final_diff)
+
+    return final_diff
+
+    # with open('files/output.txt', 'w') as output:
+    #     for key, value in parameter_counter.items():
+
+    #         if value == 2:
+    #             if is_equal_item(first_file, second_file, key):
+    #                 output.write(get_equal_item(key))
+    #                 continue
+    #             output.write(get_item_from_first_file(key))
+    #             output.write(get_item_from_second_file(key))
+
+    #         elif key in first_file:
+    #             output.write(get_item_from_first_file(key))
+
+    #         else:
+    #             output.write(get_item_from_second_file(key))
+
+    #     output.write('}')
