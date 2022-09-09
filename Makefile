@@ -15,3 +15,12 @@ lint:
 
 gendiff:
 	poetry run gendiff
+
+pytest:
+	poetry run pytest
+
+cov:
+	poetry run pytest --cov=gendiff
+
+cov missing:
+	poetry run pytest --cov-report term-missing --cov=gendiff

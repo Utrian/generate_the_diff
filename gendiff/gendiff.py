@@ -1,6 +1,6 @@
-import argparse
-import os.path
 import json
+import os.path
+import argparse
 from collections import Counter
 
 
@@ -13,8 +13,9 @@ def parser():
     parser.add_argument('second_file')
     parser.add_argument('-f', '--format', help='set format of output')
 
-    args = parser.parse_args()
+    args = parser.parse_args(['files/first_file.json', 'files/second_file.json'])
 
+    print(args)
     return args
 
 
