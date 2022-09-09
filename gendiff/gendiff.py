@@ -4,16 +4,26 @@ import argparse
 from collections import Counter
 
 
+OPERATIONS = {
+    'Equal': '     ',
+    'Delete': '  -  ',
+    'Adding': '  +  '
+}
+
+
 def parser():
     parser = argparse.ArgumentParser(
         description='Compares two '
         'configuration files and shows a difference.'
-        )
+    )
     parser.add_argument('first_file')
     parser.add_argument('second_file')
     parser.add_argument('-f', '--format', help='set format of output')
 
-    args = parser.parse_args(['files/first_file.json', 'files/second_file.json'])
+    args = parser.parse_args([
+        'files/first_file.json',
+        'files/second_file.json'
+    ])
 
     print(args)
     return args
@@ -57,16 +67,8 @@ def is_equal_item(first_file, second_file, key):
             return True
 
 
-def get_equal_item(key, file=get_first_file()):
-    return f'     {key}: {get_item(file, key)}'
-
-
-def get_item_from_first_file(key, file=get_first_file()):
-    return f'  -  {key}: {get_item(file, key)}'
-
-
-def get_item_from_second_file(key, file=get_second_file()):
-    return f'  +  {key}: {get_item(file, key)}'
+def get_string_line(file, key, operation):
+    return f'{OPERATIONS[operation]}{key}: {get_item(file, key)}'
 
 
 def generate_diff():
@@ -82,16 +84,18 @@ def generate_diff():
 
         if value == 2:
             if is_equal_item(first_file, second_file, key):
-                parameters.append((get_equal_item(key)))
+                parameters.append((
+                    get_string_line(first_file, key, 'Equal')
+                ))
                 continue
-            parameters.append(get_item_from_first_file(key))
-            parameters.append(get_item_from_second_file(key))
+            parameters.append(get_string_line(first_file, key, 'Delete'))
+            parameters.append(get_string_line(second_file, key, 'Adding'))
 
         elif key in first_file:
-            parameters.append(get_item_from_first_file(key))
+            parameters.append(get_string_line(first_file, key, 'Delete'))
 
         else:
-            parameters.append(get_item_from_second_file(key))
+            parameters.append(get_string_line(second_file, key, 'Adding'))
 
     parameters.append('}')
 
