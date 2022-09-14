@@ -19,8 +19,14 @@ gendiff:
 pytest:
 	poetry run pytest
 
-cov:
-	poetry run pytest --cov=gendiff
+test-coverage:
+	coverage run -m pytest tests
 
-cov missing:
+coverage:
+	coverage report
+
+coverage-missing:
 	poetry run pytest --cov-report term-missing --cov=gendiff
+
+coverage-1:
+	coverage report
