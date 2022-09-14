@@ -5,9 +5,9 @@ from collections import Counter
 
 
 OPERATIONS = {
-    'Equal': '     ',
-    'Delete': '  -  ',
-    'Adding': '  +  '
+    'Equal': '    ',
+    'Delete': '  - ',
+    'Adding': '  + '
 }
 
 
@@ -16,16 +16,20 @@ def parser():
         description='Compares two '
         'configuration files and shows a difference.'
     )
-    parser.add_argument('first_file')
-    parser.add_argument('second_file')
+    parser.add_argument(
+        'first_file',
+        nargs='?', type=str,
+        default='files/first_file.json'
+    )
+    parser.add_argument(
+        'second_file',
+        nargs='?', type=str,
+        default='files/second_file.json'
+    )
     parser.add_argument('-f', '--format', help='set format of output')
 
-    args = parser.parse_args([
-        'files/first_file.json',
-        'files/second_file.json'
-    ])
+    args = parser.parse_args()
 
-    print(args)
     return args
 
 
@@ -65,6 +69,7 @@ def is_equal_item(first_file, second_file, key):
     if key in first_file and key in second_file:
         if get_item(first_file, key) == get_item(second_file, key):
             return True
+    return False
 
 
 def get_string_line(file, key, operation):
