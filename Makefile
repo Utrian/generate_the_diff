@@ -27,6 +27,3 @@ coverage:
 
 coverage-missing:
 	poetry run pytest --cov-report term-missing --cov=gendiff
-
-coverage-1:
-	coverage report
