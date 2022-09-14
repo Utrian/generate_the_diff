@@ -28,7 +28,7 @@ def parser():
     )
     parser.add_argument('-f', '--format', help='set format of output')
 
-    args = parser.parse_args()
+    args = parser.parse_args(['files/first_file.json', 'files/second_file.json'])
 
     return args
 
