@@ -41,9 +41,9 @@ def test_is_equal_item(opened_json_file):
 
 def test_get_string_line(opened_json_file):
     first_file, second_file = opened_json_file
-    case_1 = '     host: hexlet.io'
-    case_2 = '  -  follow: false'
-    case_3 = '  +  timeout: 20'
+    case_1 = '    host: hexlet.io'
+    case_2 = '  - follow: false'
+    case_3 = '  + timeout: 20'
     assert gendiff.get_string_line(first_file, 'host', 'Equal') == case_1
     assert gendiff.get_string_line(first_file, 'follow', 'Delete') == case_2
     assert gendiff.get_string_line(second_file, 'timeout', 'Adding') == case_3

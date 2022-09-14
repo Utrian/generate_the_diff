@@ -21,10 +21,11 @@ def opened_json_file():
 def diff():
     return '\n'.join([
         '{',
-        '  -  follow: false',
-        '     host: hexlet.io',
-        '  -  proxy: 123.234.53.22',
-        '  -  timeout: 50', '  +  timeout: 20',
-        '  +  verbose: true',
+        '  - follow: false',
+        '    host: hexlet.io',
+        '  - proxy: 123.234.53.22',
+        '  - timeout: 50',
+        '  + timeout: 20',
+        '  + verbose: true',
         '}'
     ])
