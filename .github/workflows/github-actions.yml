@@ -21,7 +21,6 @@ jobs:
       - name: Run tests
         run: poetry run pytest
       - name: Run coverage
-        needs: 
         uses: paambaati/codeclimate-action@v2.7.5
         with:
           run: poetry run pytest --cov=gendiff --cov-report xml tests/
