@@ -21,11 +21,7 @@ jobs:
       - name: Run tests
         run: poetry run pytest
       - name: Run coverage
+        needs: 
         uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: d9e0e8f0be18b42472370df1d089b65d4507697126f7e3b9d47ff69c3f7e59ee
         with:
-          coverageCommand: |
-            coverage run pytest test
-            coverage report xml
-            coverage xml --data-file=coverage.xml
+          run: poetry run pytest --cov=gendiff --cov-report xml tests/
