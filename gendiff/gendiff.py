@@ -84,30 +84,30 @@ def generate_diff():
     all_keys = sorted(
         [key for key in first_file] + [key for key in second_file]
     )
-    parameter_counter = Counter(all_keys)
+    keys_counter = Counter(all_keys)
 
-    parameters = ['{']
+    pre_final_diff = ['{']
 
-    for key, value in parameter_counter.items():
+    for key, value in keys_counter.items():
 
         if value == 2:
             if is_equal_item(first_file, second_file, key):
-                parameters.append((
+                pre_final_diff.append((
                     get_string_line(first_file, key, 'Equal')
                 ))
                 continue
-            parameters.append(get_string_line(first_file, key, 'Delete'))
-            parameters.append(get_string_line(second_file, key, 'Adding'))
+            pre_final_diff.append(get_string_line(first_file, key, 'Delete'))
+            pre_final_diff.append(get_string_line(second_file, key, 'Adding'))
 
         elif key in first_file:
-            parameters.append(get_string_line(first_file, key, 'Delete'))
+            pre_final_diff.append(get_string_line(first_file, key, 'Delete'))
 
         else:
-            parameters.append(get_string_line(second_file, key, 'Adding'))
+            pre_final_diff.append(get_string_line(second_file, key, 'Adding'))
 
-    parameters.append('}')
+    pre_final_diff.append('}')
 
-    final_diff = '\n'.join(parameters)
+    final_diff = '\n'.join(pre_final_diff)
 
     print(final_diff)
 
