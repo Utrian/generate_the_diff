@@ -25,6 +25,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: d9e0e8f0be18b42472370df1d089b65d4507697126f7e3b9d47ff69c3f7e59ee
         with:
-          coverageCommand: coverage run pytest test
-          coverageCommand: coverage report xml
-          coverageCommand: coverage xml --data-file=coverage.xml
+          coverageCommand: |
+            coverage run pytest test
+            coverage report xml
+            coverage xml --data-file=coverage.xml
