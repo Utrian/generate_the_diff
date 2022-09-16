@@ -1,4 +1,4 @@
-name: code-checks
+name: pyci
 on:
   push:
     branches:
@@ -12,14 +12,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install deps
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade poetry
           poetry install
-      - name: Run flake8
-        run: poetry run flake8 gendiff
-      - name: Run tests
-        run: poetry run pytest
+      - name: Run tests & linter
+        run: |
+          make pytest
+          make lint
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
         env:
