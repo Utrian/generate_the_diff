@@ -22,8 +22,5 @@ pytest:
 test-coverage:
 	coverage run -m pytest tests
 
-coverage:
-	coverage report
-
 coverage-missing:
 	poetry run pytest --cov-report term-missing --cov=gendiff

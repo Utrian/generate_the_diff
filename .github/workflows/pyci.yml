@@ -1,0 +1,29 @@
+name: code-checks
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 #переносит репозиторий в выбранную выше среду
+      - name: Install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade poetry
+          poetry install
+      - name: Run flake8
+        run: poetry run flake8 gendiff
+      - name: Run tests
+        run: poetry run pytest
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: d9e0e8f0be18b42472370df1d089b65d4507697126f7e3b9d47ff69c3f7e59ee
+        with:
+          coverageCommand: make test-coverage
+          debug: true

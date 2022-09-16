@@ -4,13 +4,6 @@ import argparse
 from collections import Counter
 
 
-OPERATIONS = {
-    'Equal': '    ',
-    'Delete': '  - ',
-    'Adding': '  + '
-}
-
-
 def parser():
     parser = argparse.ArgumentParser(
         description='Compares two '
@@ -42,8 +35,15 @@ def get_files() -> dict:
     abs_path_first_file = os.path.abspath(args.first_file)
     abs_path_second_file = os.path.abspath(args.second_file)
 
-    first_file = json.load(open(abs_path_first_file))
-    second_file = json.load(open(abs_path_second_file))
+    if (abs_path_first_file[-4:] == 'json' and
+        abs_path_second_file[-4:] == 'json'):
+        first_file = json.load(open(abs_path_first_file))
+        second_file = json.load(open(abs_path_second_file))
+
+    elif (abs_path_first_file[-4:] == 'yaml' and
+        abs_path_second_file[-4:] == 'yaml'):
+        pass
+
 
     return first_file, second_file
 
@@ -68,6 +68,19 @@ def get_item(file, key):
     return normalize_bool(file[key])
 
 
+def get_operation(operation):
+    OPERATIONS = {
+    'Equal': '    ',
+    'Delete': '  - ',
+    'Adding': '  + '
+    }
+    return OPERATIONS[operation]
+
+
+def get_string_line(file, key, operation):
+    return f'{get_operation(operation)}{key}: {get_item(file, key)}\n'
+
+
 def is_equal_item(first_file, second_file, key):
     if key in first_file and key in second_file:
         if get_item(first_file, key) == get_item(second_file, key):
@@ -75,58 +88,29 @@ def is_equal_item(first_file, second_file, key):
     return False
 
 
-def get_string_line(file, key, operation):
-    return f'{OPERATIONS[operation]}{key}: {get_item(file, key)}'
-
-
 def generate_diff():
     first_file, second_file = get_files()
     all_keys = sorted(
-        [key for key in first_file] + [key for key in second_file]
+        [key for key in first_file] +
+        [key for key in second_file if not key in first_file]
     )
-    keys_counter = Counter(all_keys)
 
-    pre_final_diff = ['{']
-
-    for key, value in keys_counter.items():
-
-        if value == 2:
+    with open('files/output.txt', 'w+') as output:
+        output.write('{\n')
+        for key in all_keys:
             if is_equal_item(first_file, second_file, key):
-                pre_final_diff.append((
-                    get_string_line(first_file, key, 'Equal')
-                ))
-                continue
-            pre_final_diff.append(get_string_line(first_file, key, 'Delete'))
-            pre_final_diff.append(get_string_line(second_file, key, 'Adding'))
+                output.write(get_string_line(first_file, key, 'Equal'))
+            elif key in first_file and key in second_file:
+                output.write(get_string_line(first_file, key, 'Delete'))
+                output.write(get_string_line(second_file, key, 'Adding'))
+            elif key in first_file:
+                output.write(get_string_line(first_file, key, 'Delete'))
+            elif key in second_file:
+                output.write(get_string_line(second_file, key, 'Adding'))
+        output.write('}')  
 
-        elif key in first_file:
-            pre_final_diff.append(get_string_line(first_file, key, 'Delete'))
+        output.seek(0)
+        diff = output.read()
+        print(diff)
 
-        else:
-            pre_final_diff.append(get_string_line(second_file, key, 'Adding'))
-
-    pre_final_diff.append('}')
-
-    final_diff = '\n'.join(pre_final_diff)
-
-    print(final_diff)
-
-    return final_diff
-
-    # with open('files/output.txt', 'w') as output:
-    #     for key, value in parameter_counter.items():
-
-    #         if value == 2:
-    #             if is_equal_item(first_file, second_file, key):
-    #                 output.write(get_equal_item(key))
-    #                 continue
-    #             output.write(get_item_from_first_file(key))
-    #             output.write(get_item_from_second_file(key))
-
-    #         elif key in first_file:
-    #             output.write(get_item_from_first_file(key))
-
-    #         else:
-    #             output.write(get_item_from_second_file(key))
-
-    #     output.write('}')
+    return diff

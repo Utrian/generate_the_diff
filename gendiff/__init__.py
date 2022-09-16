@@ -1,24 +1,15 @@
-from gendiff.gendiff import OPERATIONS
-from gendiff.gendiff import parser
-from gendiff.gendiff import get_files
-from gendiff.gendiff import get_first_file
-from gendiff.gendiff import get_second_file
-from gendiff.gendiff import normalize_bool
-from gendiff.gendiff import get_item
-from gendiff.gendiff import is_equal_item
-from gendiff.gendiff import get_string_line
-from gendiff.gendiff import generate_diff
+from gendiff import gendiff
 
 
 __all__ = (
-    OPERATIONS,
-    parser,
-    get_files,
-    get_first_file,
-    get_second_file,
-    normalize_bool,
-    get_item,
-    is_equal_item,
-    get_string_line,
-    generate_diff
+    gendiff.parser,
+    gendiff.get_files,
+    gendiff.get_first_file,
+    gendiff.get_second_file,
+    gendiff.normalize_bool,
+    gendiff.get_item,
+    gendiff.is_equal_item,
+    gendiff.get_operation,
+    gendiff.get_string_line,
+    gendiff.generate_diff
 )
