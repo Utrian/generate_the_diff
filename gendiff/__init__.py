@@ -1,15 +1,15 @@
 from gendiff import gendiff
-
+from gendiff.tools import tools
 
 __all__ = (
-    gendiff.parser,
-    gendiff.get_files,
-    gendiff.get_first_file,
-    gendiff.get_second_file,
-    gendiff.normalize_bool,
-    gendiff.get_item,
-    gendiff.is_equal_item,
-    gendiff.get_operation,
-    gendiff.get_string_line,
+    tools.parser,
+    tools.get_files,
+    tools.get_first_file,
+    tools.get_second_file,
+    tools.normalize_bool,
+    tools.get_item,
+    tools.is_equal_item,
+    tools.get_operation,
+    tools.get_string_line,
     gendiff.generate_diff
 )
