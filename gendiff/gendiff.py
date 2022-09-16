@@ -1,7 +1,6 @@
 import json
 import os.path
 import argparse
-from collections import Counter
 
 
 def parser():
@@ -35,15 +34,14 @@ def get_files() -> dict:
     abs_path_first_file = os.path.abspath(args.first_file)
     abs_path_second_file = os.path.abspath(args.second_file)
 
-    if (abs_path_first_file[-4:] == 'json' and
-        abs_path_second_file[-4:] == 'json'):
+    first_file_format = abs_path_first_file[-4:]
+    second_file_format = abs_path_second_file[-4:]
+
+    if first_file_format == 'json':
         first_file = json.load(open(abs_path_first_file))
+
+    if second_file_format == 'json':
         second_file = json.load(open(abs_path_second_file))
-
-    elif (abs_path_first_file[-4:] == 'yaml' and
-        abs_path_second_file[-4:] == 'yaml'):
-        pass
-
 
     return first_file, second_file
 
@@ -70,9 +68,9 @@ def get_item(file, key):
 
 def get_operation(operation):
     OPERATIONS = {
-    'Equal': '    ',
-    'Delete': '  - ',
-    'Adding': '  + '
+        'Equal': '    ',
+        'Delete': '  - ',
+        'Adding': '  + '
     }
     return OPERATIONS[operation]
 
@@ -92,7 +90,7 @@ def generate_diff():
     first_file, second_file = get_files()
     all_keys = sorted(
         [key for key in first_file] +
-        [key for key in second_file if not key in first_file]
+        [key for key in second_file if key not in first_file]
     )
 
     with open('files/output.txt', 'w+') as output:
@@ -107,7 +105,7 @@ def generate_diff():
                 output.write(get_string_line(first_file, key, 'Delete'))
             elif key in second_file:
                 output.write(get_string_line(second_file, key, 'Adding'))
-        output.write('}')  
+        output.write('}')
 
         output.seek(0)
         diff = output.read()

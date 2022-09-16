@@ -20,7 +20,7 @@ pytest:
 	poetry run pytest
 
 test-coverage:
-	coverage run -m pytest tests
+	poetry run pytest --cov=gendiff --cov-report xml
 
 coverage-missing:
 	poetry run pytest --cov-report term-missing --cov=gendiff
