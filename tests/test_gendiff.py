@@ -8,21 +8,21 @@ from gendiff import gendiff
 @fixture
 def json_first_file():
     return json_load(open(
-        '/home/paul/python-project-50/tests/fixtures/json/first_file.json')
+        'tests/fixtures/json/first_file.json')
         )
 
 
 @fixture
 def json_second_file():
     return json_load(open(
-        '/home/paul/python-project-50/tests/fixtures/json/second_file.json')
+        'tests/fixtures/json/second_file.json')
         )
 
 
 @fixture
 def yaml_first_file():
     return yaml_load(open(
-        '/home/paul/python-project-50/tests/fixtures/yaml/first_file.yaml'),
+        'tests/fixtures/yaml/first_file.yaml'),
         Loader=yaml_Loader
         )
 
@@ -30,14 +30,14 @@ def yaml_first_file():
 @fixture
 def yaml_second_file():
     return yaml_load(open(
-        '/home/paul/python-project-50/tests/fixtures/yaml/second_file.yaml'),
+        'tests/fixtures/yaml/second_file.yaml'),
         Loader=yaml_Loader
         )
 
 
 @fixture
 def diff():
-    return open('/home/paul/python-project-50/tests/fixtures/diff.txt').read()
+    return open('tests/fixtures/diff.txt').read()
 
 
 def test_get_files(
