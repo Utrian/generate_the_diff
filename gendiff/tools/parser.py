@@ -19,8 +19,8 @@ def parser():
     parser.add_argument('-f', '--format', help='set format of output')
 
     args = parser.parse_args([
-        '/home/paul/python-project-50/files/json/first_file.json',
-        '/home/paul/python-project-50/files/json/second_file.json'
+        'files/json/first_file.json',
+        'files/json/second_file.json'
     ])
 
     return args
