@@ -1,5 +1,6 @@
 from gendiff.tools import tools
 
+
 def generate_diff():
     first_file, second_file = tools.get_files()
     all_keys = sorted(

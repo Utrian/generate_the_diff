@@ -1,22 +1,66 @@
+from pytest import fixture
+from json import load as json_load
+from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff import tools
 from gendiff import gendiff
-from tests.fixtures import opened_json_file
-from tests.fixtures import diff
 
 
-def test_get_files(opened_json_file):
+@fixture
+def json_first_file():
+    return json_load(open(
+        '/home/paul/python-project-50/tests/fixtures/json/first_file.json')
+        )
+
+
+@fixture
+def json_second_file():
+    return json_load(open(
+        '/home/paul/python-project-50/tests/fixtures/json/second_file.json')
+        )
+
+
+@fixture
+def yaml_first_file():
+    return yaml_load(open(
+        '/home/paul/python-project-50/tests/fixtures/yaml/first_file.yaml'),
+        Loader=yaml_Loader
+        )
+
+
+@fixture
+def yaml_second_file():
+    return yaml_load(open(
+        '/home/paul/python-project-50/tests/fixtures/yaml/second_file.yaml'),
+        Loader=yaml_Loader
+        )
+
+
+@fixture
+def diff():
+    return open('/home/paul/python-project-50/tests/fixtures/diff.txt').read()
+
+
+def test_get_files(
+        json_first_file,
+        json_second_file,
+        yaml_first_file,
+        yaml_second_file
+        ):
     result = tools.get_files()
-    assert result == opened_json_file
+    assert result == (json_first_file, json_second_file)
+    assert result == (yaml_first_file, yaml_second_file)
 
 
-def test_get_first_file(opened_json_file):
+def test_get_first_file(json_first_file, yaml_first_file):
     result = tools.get_first_file()
-    assert result == opened_json_file[0]
+    assert result == json_first_file
+    assert result == yaml_first_file
 
 
-def test_get_second_file(opened_json_file):
+def test_get_second_file(json_second_file, yaml_second_file):
     result = tools.get_second_file()
-    assert result == opened_json_file[1]
+    assert result == json_second_file
+    assert result == yaml_second_file
 
 
 def test_normalize_bool():
@@ -28,26 +72,9 @@ def test_normalize_bool():
     assert tools.normalize_bool('sa df') == 'sa df'
 
 
-def test_get_item(opened_json_file):
-    assert tools.get_item(opened_json_file[0], 'host') == 'hexlet.io'
-    assert tools.get_item(opened_json_file[1], 'timeout') == 20
-
-
-def test_is_equal_item(opened_json_file):
-    first_file, second_file = opened_json_file
-    assert tools.is_equal_item(first_file, second_file, 'host') is True
-    assert tools.is_equal_item(first_file, second_file, 'proxy') is False
-    assert tools.is_equal_item(first_file, second_file, 1) is False
-
-
-def test_get_string_line(opened_json_file):
-    first_file, second_file = opened_json_file
-    case_1 = '    host: hexlet.io\n'
-    case_2 = '  - follow: false\n'
-    case_3 = '  + timeout: 20\n'
-    assert tools.get_string_line(first_file, 'host', 'Equal') == case_1
-    assert tools.get_string_line(first_file, 'follow', 'Delete') == case_2
-    assert tools.get_string_line(second_file, 'timeout', 'Adding') == case_3
+def test_get_item():
+    assert tools.get_item(tools.get_first_file(), 'host') == 'hexlet.io'
+    assert tools.get_item(tools.get_second_file(), 'timeout') == 20
 
 
 def test_generate_diff(diff):

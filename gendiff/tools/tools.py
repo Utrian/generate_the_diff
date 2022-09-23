@@ -1,21 +1,29 @@
-import json
-import os.path
+from os.path import abspath
+from json import load as json_load
+from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff.tools.parser import parser
+
 
 def get_files() -> dict:
     args = parser()
 
-    abs_path_first_file = os.path.abspath(args.first_file)
-    abs_path_second_file = os.path.abspath(args.second_file)
+    abs_path_first_file = abspath(args.first_file)
+    abs_path_second_file = abspath(args.second_file)
 
-    first_file_format = abs_path_first_file[-4:]
-    second_file_format = abs_path_second_file[-4:]
+    first_file_format = abs_path_first_file.split('.')[1]
+    second_file_format = abs_path_second_file.split('.')[1]
 
     if first_file_format == 'json':
-        first_file = json.load(open(abs_path_first_file))
+        first_file = json_load(open(abs_path_first_file))
+
+    elif first_file_format in ['yml', 'yaml']:
+        first_file = yaml_load(open(abs_path_first_file), Loader=yaml_Loader)
 
     if second_file_format == 'json':
-        second_file = json.load(open(abs_path_second_file))
+        second_file = json_load(open(abs_path_second_file))
+
+    elif second_file_format in ['yml', 'yaml']:
+        second_file = yaml_load(open(abs_path_second_file), Loader=yaml_Loader)
 
     return first_file, second_file
 
