@@ -4,7 +4,7 @@ from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff.tools.parser import parser
 
 
-def get_files() -> dict:
+def get_files() -> tuple:
     args = parser()
 
     abs_path_first_file = abspath(args.first_file)
