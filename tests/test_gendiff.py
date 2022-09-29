@@ -72,10 +72,5 @@ def test_normalize_bool():
     assert tools.normalize_bool('sa df') == 'sa df'
 
 
-def test_get_item():
-    assert tools.get_item(tools.get_first_file(), 'host') == 'hexlet.io'
-    assert tools.get_item(tools.get_second_file(), 'timeout') == 20
-
-
 def test_generate_diff(diff):
     assert gendiff.generate_diff() == diff
