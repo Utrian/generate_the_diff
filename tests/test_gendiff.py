@@ -2,7 +2,7 @@ from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff import tools
-from gendiff import gendiff
+from gendiff import gen_diff
 
 
 @fixture
@@ -72,5 +72,5 @@ def test_normalize_bool():
     assert tools.normalize_bool('sa df') == 'sa df'
 
 
-def test_generate_diff(diff):
-    assert gendiff.generate_diff() == diff
+# def test_generate_diff(diff):
+#     assert gen_diff.generate_diff() == diff
