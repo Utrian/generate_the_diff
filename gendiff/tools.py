@@ -66,9 +66,10 @@ def get_string_line(file, key, operation):
     return f'{get_operation(operation)}{key}: {get_item(file, key)}\n'
 
 
-def get_inner_data(key, status, lvl, value):
+def get_inner_data(key, node, status, lvl, value):
     return {
         'key': key,
+        'node': node,
         'status': status,
         'lvl': lvl,
         'value': value
@@ -76,28 +77,25 @@ def get_inner_data(key, status, lvl, value):
 
 
 def is_equal_items(first_file, second_file, key):
-    if key in first_file and key in second_file:
-        if get_item(first_file, key) == get_item(second_file, key):
-            return True
+    if get_item(first_file, key) == get_item(second_file, key):
+        return True
     return False
 
 
 def is_inner_nodes(first_file, second_file, key):
-    if key in first_file and key in second_file:
-        if (isinstance(first_file[key], dict) and
-                isinstance(second_file[key], dict)):
-            return True
+    if (isinstance(first_file[key], dict) and
+            isinstance(second_file[key], dict)):
+        return True
     return False
 
 
 def is_inner_node(file, key):
-    if key in file and isinstance(file[key], dict):
+    if isinstance(file[key], dict):
         return True
     return False
 
 
 def is_not_equal_items(first_file, second_file, key):
-    if key in first_file and key in second_file:
-        if get_item(first_file, key) != get_item(second_file, key):
-            return True
+    if get_item(first_file, key) != get_item(second_file, key):
+        return True
     return False

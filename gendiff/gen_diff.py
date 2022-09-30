@@ -1,6 +1,6 @@
 from gendiff.tools import (
-    get_files,
-    is_equal_items, is_inner_nodes,
+    get_files, is_equal_items,
+    is_inner_node, is_inner_nodes,
     is_not_equal_items, get_inner_data
 )
 
@@ -16,33 +16,43 @@ def generate_diff(file_1=None, file_2=None):
         ))
 
         for key in all_keys:
-            if is_inner_nodes(file_1, file_2, key):
-                child = walk(file_1[key], file_2[key], current_lvl + 1)
-                diff.append(
-                    get_inner_data(key, 'inner node', current_lvl, child)
-                )
+            if key in file_1 and key in file_2:
 
-            elif is_equal_items(file_1, file_2, key):
-                diff.append(
-                    get_inner_data(key, 'equal', current_lvl, file_1[key])
-                )
+                if is_equal_items(file_1, file_2, key):
+                    if is_inner_nodes(file_1, file_2, key):
+                        child = walk(file_1[key], file_2[key], current_lvl + 1)
+                        diff.append(
+                            get_inner_data(key, 'inner', 'equal', current_lvl, child)
+                        )
+                        continue
 
-            elif is_not_equal_items(file_1, file_2, key):
-                diff.append(
-                    get_inner_data(
-                        key, 'changed', current_lvl,
-                        (file_1[key], file_2[key])
+                    diff.append(
+                        get_inner_data(key, 'leaf', 'equal', current_lvl, file_1[key])
                     )
-                )
+
+                elif is_not_equal_items(file_1, file_2, key):
+                    if is_inner_nodes(file_1, file_2, key):
+                        child = walk(file_1[key], file_2[key], current_lvl + 1)
+                        diff.append(
+                            get_inner_data(key, 'inner', 'equal', current_lvl, child)
+                        )
+                        continue
+
+                    diff.append(
+                        get_inner_data(
+                            key, 'leaf', 'changed', current_lvl,
+                            (file_1[key], file_2[key])
+                        )
+                    )
 
             elif key in file_1:
                 diff.append(
-                    get_inner_data(key, 'deleted', current_lvl, file_1[key])
+                    get_inner_data(key, 'leaf', 'deleted', current_lvl, file_1[key])
                 )
 
             elif key in file_2:
                 diff.append(
-                    get_inner_data(key, 'added', current_lvl, file_2[key])
+                    get_inner_data(key, 'leaf', 'added', current_lvl, file_2[key])
                 )
 
         return diff
