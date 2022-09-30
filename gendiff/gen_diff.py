@@ -7,7 +7,7 @@ from gendiff.tools import (
 def external_walk(file, depth):
     diff = list()
     all_keys = sorted(list([key for key in file]))
-    
+
     for key in all_keys:
         if is_inner_node(key, file):
             child = external_walk(file[key], depth + 1)
@@ -52,7 +52,7 @@ def generate_diff(file_1=None, file_2=None):
 
             elif key in file_1:
                 if is_inner_node(key, file_1):
-                    child = external_walk(file_1[key], depth)
+                    child = external_walk(file_1[key], depth + 1)
                     diff.append(
                         get_inner_data(key, 'deleted', depth, child)
                     )
@@ -64,7 +64,7 @@ def generate_diff(file_1=None, file_2=None):
 
             elif key in file_2:
                 if is_inner_node(key, file_2):
-                    child = external_walk(file_2[key], depth)
+                    child = external_walk(file_2[key], depth + 1)
                     diff.append(
                         get_inner_data(key, 'added', depth, child)
                     )
@@ -76,6 +76,3 @@ def generate_diff(file_1=None, file_2=None):
 
         return diff
     return walk(file_1, file_2, 1)
-
-
-print(generate_diff())

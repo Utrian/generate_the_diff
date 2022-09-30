@@ -48,36 +48,39 @@ def normalize_bool(value):
     return value
 
 
-def get_item(file, key):
+def get_value(file, key):
     return normalize_bool(file[key])
 
 
-def get_operation(operation):
+def get_operation(status):
     OPERATIONS = {
         'equal': '    ',
-        'inner node': '    ',
         'deleted': '  - ',
         'added': '  + '
     }
-    return OPERATIONS[operation]
+    return OPERATIONS[status]
 
 
-def get_string_line(file, key, operation):
-    return f'{get_operation(operation)}{key}: {get_item(file, key)}\n'
+def get_string_line(node):
+    depth = node['depth'] - 1
+    space = "  " * depth
+
+    return f"{space}{get_operation(node['status'])}{node['key']}:\n"
 
 
-def get_inner_data(key, status, lvl, value):
+def get_inner_data(key, status, depth, value, child=[]):
     return {
         'key': key,
         'status': status,
-        'lvl': lvl,
-        'value': value
+        'depth': depth,
+        'value': value,
+        'child': child
     }
 
 
 def is_equal_items(first_file, second_file, key):
     if key in first_file and key in second_file:
-        if get_item(first_file, key) == get_item(second_file, key):
+        if get_value(first_file, key) == get_value(second_file, key):
             return True
     return False
 
@@ -105,6 +108,6 @@ def is_inner_node(key, *files):
 
 def is_not_equal_items(first_file, second_file, key):
     if key in first_file and key in second_file:
-        if get_item(first_file, key) != get_item(second_file, key):
+        if get_value(first_file, key) != get_value(second_file, key):
             return True
     return False
