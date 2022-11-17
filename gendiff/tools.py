@@ -1,7 +1,7 @@
 from os.path import abspath
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from gendiff import get_parsed_data
+from parse_files import get_parsed_data
 
 
 def get_files() -> tuple:

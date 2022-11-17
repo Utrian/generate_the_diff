@@ -4,7 +4,7 @@ from tools import get_string_line
 DIFF = generate_diff()
 
 
-def stylish():
+def formater():
 
     with open('files/output.txt', 'w') as output:
         output.write('{')
@@ -20,5 +20,3 @@ def print_diff():
     for key in DIFF:
         print(key, '\n')
 
-stylish()
-print_diff()

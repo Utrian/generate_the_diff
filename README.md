@@ -5,3 +5,5 @@
 
 
 ### [Video example of program operation](https://asciinema.org/a/4UOODJn7h4motEJQQlMXuwScV)
+
+[testing argparse](https://jugmac00.github.io/blog/testing-argparse-applications-the-better-way/)

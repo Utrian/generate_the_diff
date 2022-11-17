@@ -1,4 +1,5 @@
-from gendiff.tools import (
+import stylish
+from tools import (
     get_files, is_equal_items,
     is_inner_node, is_not_equal_items, get_inner_data
 )
@@ -19,7 +20,7 @@ def external_walk(file, depth):
     return diff
 
 
-def generate_diff(file_1=None, file_2=None):
+def generate_diff(file_1=None, file_2=None, formater=stylish.formater):
     if file_1 is None and file_2 is None:
         file_1, file_2 = get_files()
 
@@ -31,7 +32,7 @@ def generate_diff(file_1=None, file_2=None):
         ))
 
         for key in all_keys:
-            if is_inner_node(key, file_1, file_2):
+            if is_inner_node(key, file_1, file_2): #проверка на то что это не листовой узел для того чтобы идти дальше и каждому элементу дать его глубину, что поможет при форматировании
                 child = walk(file_1[key], file_2[key], depth + 1)
                 diff.append(
                     get_inner_data(key, 'equal', depth, child)
