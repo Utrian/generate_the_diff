@@ -56,25 +56,35 @@ def get_operation(status):
     OPERATIONS = {
         'equal': '    ',
         'deleted': '  - ',
-        'added': '  + '
+        'added': '  + ',
+        'changed': (
+            '  - ',
+            '  + '
+        )
     }
     return OPERATIONS[status]
 
 
 def get_string_line(node):
-    depth = node['depth'] - 1
+    depth = get_value(node, 'depth') - 1
     space = "  " * depth
+    operation = get_operation(get_value(node, 'status'))
+    key = get_value(node, 'key')
 
-    return f"{space}{get_operation(node['status'])}{node['key']}:\n"
+    if isinstance(get_value(node, 'value'), list):
+        open_bracket = '{'
+        return f"{space}{operation}{key}: {open_bracket}\n"
+
+    value = get_value(node, 'value')
+    return f"{space}{operation}{key}: {value}\n"
 
 
-def get_inner_data(key, status, depth, value, child=[]):
+def get_inner_data(key, status, depth, value):
     return {
         'key': key,
         'status': status,
         'depth': depth,
         'value': value,
-        'child': child
     }
 
 
@@ -85,29 +95,36 @@ def is_equal_items(first_file, second_file, key):
     return False
 
 
-def is_inner_node(key, *files):
-    if len(files) == 2:
-        first_file, second_file = files
-        if key in first_file and key in second_file:
-            if (isinstance(first_file[key], dict) and
-                    isinstance(second_file[key], dict)):
-                return True
-        return False
-
-    file = files[0]
-    if isinstance(file[key], dict):
-        return True
-    return False
-
-
-# def is_inner_node(file, key):
-#     if isinstance(file[key], dict):
-#         return True
-#     return False
-
-
 def is_not_equal_items(first_file, second_file, key):
     if key in first_file and key in second_file:
         if get_value(first_file, key) != get_value(second_file, key):
             return True
     return False
+
+
+def is_inner_node(key, *files):
+    if len(files) == 2:
+        first_file, second_file = files
+
+        if key in first_file and key in second_file:
+            return (
+                isinstance(get_value(first_file, key), dict) and
+                isinstance(get_value(second_file, key), dict)
+            )
+        return False
+
+    if files == ():
+        value = key
+        return isinstance(value, list)
+    
+    if len(files) == 0:
+        value = key
+        return isinstance(value, list)
+
+    file = files[0]
+
+    return isinstance(file[key], dict)
+
+
+def is_changed_value(item):
+    return isinstance(item, tuple)
