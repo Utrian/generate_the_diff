@@ -2,22 +2,15 @@ from tools import get_value, get_operation, is_inner_node, is_changed_value
 from os.path import abspath
 import gen_diff
 
+
 PATH_OUTPUT_FILE = abspath('files/output.txt')
 
 
-# def clear_output_file():
-#     with open(PATH_OUTPUT_FILE, 'w'):
-#         pass
-
-
-# clear_output_file()
-
-
-# def is_inner_node():
-
-
 def stylish(diff):
-    with open(PATH_OUTPUT_FILE, 'a') as output:
+    output = open(PATH_OUTPUT_FILE, 'w')
+    output.write('{\n')
+
+    def walk(diff):
         for node in diff:
             depth = get_value(node, 'depth') - 1
             space = "    " * depth
@@ -30,8 +23,8 @@ def stylish(diff):
                 open_bracket = '{'
                 close_bracket = f"{indent}{'}'}"
 
-                output.write(f"{indent}{operation}{key}: {open_bracket}\n")
-                stylish(value)
+                output.write(f"{space}{operation}{key}: {open_bracket}\n")
+                walk(value)
                 output.write(f"{close_bracket}\n")
                 continue
 
@@ -43,8 +36,10 @@ def stylish(diff):
                 continue
 
             output.write(f"{space}{operation}{key}: {value}\n")
-    
-    return 'Complete'
+
+    walk(diff)
+    output.write('}')
+    output.close()
 
 
 stylish(gen_diff.generate_diff())

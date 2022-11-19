@@ -103,3 +103,4 @@ def generate_diff(file_1=None, file_2=None): #formatter=formatter_diff.stylish
 
         return diff
     return walk(file_1, file_2, 1)
+
