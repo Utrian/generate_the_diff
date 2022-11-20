@@ -10,11 +10,11 @@ publish:
 package-install:
 	python3 -m pip install --user dist/*.whl
 
+generate_diff:
+	poetry run gendiff
+
 lint:
 	poetry run flake8 gendiff
-
-gendiff:
-	poetry run gendiff
 
 pytest:
 	poetry run pytest

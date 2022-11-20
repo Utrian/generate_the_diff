@@ -1,5 +1,5 @@
-# import formatter_diff
-from tools import (
+import gendiff.formatter_diff as formatter_diff
+from gendiff.tools import (
     get_files, get_value, is_equal_items,
     is_inner_node, is_not_equal_items, get_inner_data
 )
@@ -20,9 +20,8 @@ def external_walk(file, depth):
     return diff
 
 
-def generate_diff(file_1=None, file_2=None): #formatter=formatter_diff.stylish
-    if file_1 is None and file_2 is None:
-        file_1, file_2 = get_files()
+def generate_diff(formatter=formatter_diff.stylish):
+    file_1, file_2 = get_files()
 
     def walk(file_1, file_2, depth):
         diff = list()
@@ -102,5 +101,8 @@ def generate_diff(file_1=None, file_2=None): #formatter=formatter_diff.stylish
                 )
 
         return diff
-    return walk(file_1, file_2, 1)
 
+    unformatted_diff = walk(file_1, file_2, 1)
+    formatter(unformatted_diff)
+
+    return unformatted_diff

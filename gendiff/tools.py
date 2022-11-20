@@ -1,7 +1,7 @@
 from os.path import abspath
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from parse_files import get_parsed_data
+from gendiff.parse_files import get_parsed_data
 
 
 def get_files() -> tuple:
@@ -116,7 +116,7 @@ def is_inner_node(key, *files):
     if files == ():
         value = key
         return isinstance(value, list)
-    
+
     if len(files) == 0:
         value = key
         return isinstance(value, list)

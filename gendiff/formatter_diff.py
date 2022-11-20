@@ -1,13 +1,13 @@
-from tools import get_value, get_operation, is_inner_node, is_changed_value
-from os.path import abspath
-import gen_diff
+from gendiff.tools import (
+                            get_value,
+                            get_operation,
+                            is_inner_node,
+                            is_changed_value
+)
 
 
-PATH_OUTPUT_FILE = abspath('files/output.txt')
-
-
-def stylish(diff):
-    output = open(PATH_OUTPUT_FILE, 'w')
+def stylish(diff, path_output='files/output.txt'):
+    output = open(path_output, 'w')
     output.write('{\n')
 
     def walk(diff):
@@ -40,6 +40,3 @@ def stylish(diff):
     walk(diff)
     output.write('}')
     output.close()
-
-
-stylish(gen_diff.generate_diff())
