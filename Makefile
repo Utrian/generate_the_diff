@@ -10,17 +10,17 @@ publish:
 package-install:
 	python3 -m pip install --user dist/*.whl
 
-generate_diff:
+gendiff:
 	poetry run gendiff
 
 lint:
-	poetry run flake8 gendiff
+	poetry run flake8 engine
 
 pytest:
 	poetry run pytest
 
 test-coverage:
-	poetry run pytest --cov=gendiff --cov-report xml
+	poetry run pytest --cov=engine --cov-report xml
 
 coverage-missing:
-	poetry run pytest --cov-report term-missing --cov=gendiff
+	poetry run pytest --cov-report term-missing --cov=engine

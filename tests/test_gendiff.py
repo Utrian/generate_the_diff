@@ -1,27 +1,113 @@
 from pytest import fixture
-from gendiff import gen_diff
+from json import load as json_load
+from yaml import load as yaml_load, Loader as yaml_Loader
+from engine import generate_diff
+from engine import formatter_diff
+
+
+@fixture
+def json_first_file():
+    return json_load(open(
+        'tests/fixtures/json/first_file.json')
+    )
+
+
+@fixture
+def json_second_file():
+    return json_load(open(
+        'tests/fixtures/json/second_file.json')
+    )
+
+
+@fixture
+def yaml_first_file():
+    return yaml_load(open(
+        'tests/fixtures/yaml/first_file.yaml'),
+        Loader=yaml_Loader
+    )
+
+
+@fixture
+def yaml_second_file():
+    return yaml_load(open(
+        'tests/fixtures/yaml/second_file.yaml'),
+        Loader=yaml_Loader
+    )
 
 
 @fixture
 def formatted_diff():
-    return open('tests/fixtures/output/formatted_diff.txt').read()
+    with open('tests/fixtures/output/formatted_diff.txt') as f:
+        return f.read()
 
 
 @fixture
 def unformatted_diff():
-    return open('tests/fixtures/output/unformatted_diff.txt').read()
+    with open('tests/fixtures/output/unformatted_diff.txt') as f:
+        return f.read()
 
 
 @fixture
 def path_output_test_file():
-    return 'tests/fixtures/output/output_test.txt'
+    return 'tests/fixtures/output/result_test_output.txt'
 
 
 @fixture
-def output_test_file(path_output_test_file):
-    return open(path_output_test_file).read()
+def output_test_file():
+    return open('tests/fixtures/output/result_test_output.txt').read()
 
 
-def test_generate_diff(unformatted_diff):
-    result = gen_diff.generate_diff()
-    assert str(result) == unformatted_diff
+def test_generate_diff_json(
+                        json_first_file,
+                        json_second_file,
+                        unformatted_diff
+):
+    result_with_json = generate_diff.generate_diff(
+        json_first_file, json_second_file
+    )
+
+    assert str(result_with_json) == unformatted_diff
+
+
+def test_generate_diff_jaml(
+                        yaml_first_file,
+                        yaml_second_file,
+                        unformatted_diff
+):
+    result_with_yaml = generate_diff.generate_diff(
+        yaml_first_file, yaml_second_file
+    )
+
+    assert str(result_with_yaml) == unformatted_diff
+
+
+def test_stylish_json(
+                        json_first_file,
+                        json_second_file,
+                        path_output_test_file,
+                        output_test_file,
+                        formatted_diff
+):
+    unf_diff_json = generate_diff.generate_diff(
+        json_first_file, json_second_file
+    )
+
+    formatter_diff.stylish(unf_diff_json, path_output_test_file)
+
+    assert output_test_file == formatted_diff
+
+
+def test_stylish_yaml(
+                        yaml_first_file,
+                        yaml_second_file,
+                        path_output_test_file,
+                        output_test_file,
+                        formatted_diff
+):
+    unf_diff_yaml = generate_diff.generate_diff(
+        yaml_first_file, yaml_second_file
+    )
+
+    formatter_diff.stylish(unf_diff_yaml, path_output_test_file)
+
+    assert output_test_file == formatted_diff

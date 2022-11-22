@@ -1,8 +1,7 @@
-from gendiff.tools import (
+from engine.tools import (
                             get_value,
                             get_operation,
-                            is_inner_node,
-                            is_changed_value
+                            is_nested_structure
 )
 
 
@@ -18,7 +17,7 @@ def stylish(diff, path_output='files/output.txt'):
             key = get_value(node, 'key')
             value = get_value(node, 'value')
 
-            if is_inner_node(value):
+            if is_nested_structure(value):
                 indent = ' ' * len(space + operation)
                 open_bracket = '{'
                 close_bracket = f"{indent}{'}'}"
@@ -26,13 +25,7 @@ def stylish(diff, path_output='files/output.txt'):
                 output.write(f"{space}{operation}{key}: {open_bracket}\n")
                 walk(value)
                 output.write(f"{close_bracket}\n")
-                continue
 
-            elif is_changed_value(value):
-                operation_1, operation_2 = operation
-                value_1, value_2 = value
-                output.write(f"{space}{operation_1}{key}: {value_1}\n")
-                output.write(f"{space}{operation_2}{key}: {value_2}\n")
                 continue
 
             output.write(f"{space}{operation}{key}: {value}\n")

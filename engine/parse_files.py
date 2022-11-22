@@ -9,18 +9,15 @@ def get_parsed_data():
     parser.add_argument(
         'first_file',
         nargs='?', type=str,
-        default='files/yaml/first_file.yaml'
+        default='files/json/first_file.json'
     )
     parser.add_argument(
         'second_file',
         nargs='?', type=str,
-        default='files/yaml/second_file.yaml'
+        default='files/json/second_file.json'
     )
     parser.add_argument('-f', '--format', help='set format of output')
 
-    args = parser.parse_args([
-        'files/yaml/first_file.yaml',
-        'files/yaml/second_file.yaml'
-    ])
-
+    args = parser.parse_args()
+    print(args)
     return args
