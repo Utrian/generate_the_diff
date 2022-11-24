@@ -1,5 +1,5 @@
 import engine.formatters.stylish as ft_stylish
-import engine.formatters.json as ft_json
+# import engine.formatters.json as ft_json
 from engine.tools import (
                             get_value, is_equal_items,
                             is_nested_structure, get_status
@@ -35,7 +35,7 @@ def generate_diff(
         ))
 
         for key in all_keys:
-            
+
             if is_nested_structure(key, file_1, file_2):
                 child = walk(
                     get_value(file_1, key),

@@ -1,42 +1,7 @@
 from engine.tools import (
-                            get_value,
+                            normalize_bool,
                             is_nested_structure
 )
-
-def get_value(file, key):
-    return file[key]
-
-
-def is_nested_structure(key, *files):
-    if len(files) == 2:
-        first_file, second_file = files
-
-        if key in first_file and key in second_file:
-            return (
-                isinstance(get_value(first_file, key), dict) and
-                isinstance(get_value(second_file, key), dict)
-            )
-        return False
-
-    if files == ():
-        value = key
-        return isinstance(value, dict)
-
-    file = files[0]
-
-    return isinstance(file[key], dict)
-
-
-def normalize_bool(value):
-    if type(value) is bool:
-        if value is True:
-            return 'true'
-        return 'false'
-
-    if value is None:
-        return 'null'
-
-    return value
 
 
 def stylish(diff: dict, path_output='files/output.txt'):
