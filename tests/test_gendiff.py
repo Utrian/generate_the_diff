@@ -1,8 +1,8 @@
 from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from engine import generate_diff
-from engine import formatter_diff
+from engine import gendiff
+import engine.formatters.stylish as ft_stylish
 
 
 @fixture
@@ -54,7 +54,8 @@ def path_output_test_file():
 
 @fixture
 def output_test_file():
-    return open('tests/fixtures/output/result_test_output.txt').read()
+    with open('tests/fixtures/output/result_test_output.txt') as f:
+        return f.read()
 
 
 def test_generate_diff_json(
@@ -62,7 +63,7 @@ def test_generate_diff_json(
                         json_second_file,
                         unformatted_diff
 ):
-    result_with_json = generate_diff.generate_diff(
+    result_with_json = gendiff.generate_diff(
         json_first_file, json_second_file
     )
 
@@ -74,7 +75,7 @@ def test_generate_diff_jaml(
                         yaml_second_file,
                         unformatted_diff
 ):
-    result_with_yaml = generate_diff.generate_diff(
+    result_with_yaml = gendiff.generate_diff(
         yaml_first_file, yaml_second_file
     )
 
@@ -88,11 +89,11 @@ def test_stylish_json(
                         output_test_file,
                         formatted_diff
 ):
-    unf_diff_json = generate_diff.generate_diff(
+    unf_diff_json = gendiff.generate_diff(
         json_first_file, json_second_file
     )
 
-    formatter_diff.stylish(unf_diff_json, path_output_test_file)
+    ft_stylish.stylish(unf_diff_json, path_output_test_file)
 
     assert output_test_file == formatted_diff
 
@@ -104,10 +105,10 @@ def test_stylish_yaml(
                         output_test_file,
                         formatted_diff
 ):
-    unf_diff_yaml = generate_diff.generate_diff(
+    unf_diff_yaml = gendiff.generate_diff(
         yaml_first_file, yaml_second_file
     )
 
-    formatter_diff.stylish(unf_diff_yaml, path_output_test_file)
+    ft_stylish.stylish(unf_diff_yaml, path_output_test_file)
 
     assert output_test_file == formatted_diff

@@ -3,7 +3,7 @@ from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
 
 
-def get_files(args) -> tuple:
+def get_formatted_files(args) -> tuple:
     abs_path_first_file = abspath(args.first_file)
     abs_path_second_file = abspath(args.second_file)
 
@@ -38,25 +38,16 @@ def normalize_bool(value):
 
 
 def get_value(file, key):
-    return normalize_bool(file[key])
+    return file[key]
 
 
-def get_operation(status):
-    OPERATIONS = {
+def get_status(status):
+    statuses = {
         'equal': '    ',
         'added': '  + ',
         'deleted': '  - '
     }
-    return OPERATIONS[status]
-
-
-def get_inner_data(key, status, depth, value):
-    return {
-        'key': key,
-        'status': status,
-        'depth': depth,
-        'value': value,
-    }
+    return statuses[status]
 
 
 def is_nested_structure(key, *files):
@@ -72,7 +63,7 @@ def is_nested_structure(key, *files):
 
     if files == ():
         value = key
-        return isinstance(value, list)
+        return isinstance(value, dict)
 
     file = files[0]
 

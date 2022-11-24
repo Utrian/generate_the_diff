@@ -19,5 +19,4 @@ def get_parsed_data():
     parser.add_argument('-f', '--format', help='set format of output')
 
     args = parser.parse_args()
-    print(args)
     return args
