@@ -30,3 +30,6 @@ def stylish(diff: dict, path_output='files/output.txt'):
     walk(diff)
     output.write('}')
     output.close()
+
+    with open(path_output, 'r') as f:
+        return f.read()

@@ -3,7 +3,7 @@ from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
 
 
-def get_formatted_files(args) -> tuple:
+def get_file_data(args) -> tuple:
     abs_path_first_file = abspath(args.first_file)
     abs_path_second_file = abspath(args.second_file)
 

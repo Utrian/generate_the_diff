@@ -5,7 +5,7 @@ from engine import gendiff
 
 def main():
     args = parse_files.get_parsed_data()
-    first_file, second_file = tools.get_files(args)
+    first_file, second_file = tools.get_file_data(args)
     gendiff.generate_diff(first_file, second_file)
 
 
