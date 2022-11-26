@@ -24,46 +24,19 @@ def plain(diff: dict, path_output='files/output.txt'):
 
     pre_value = None
     pre_status = None
+    pre_ancestry = None
 
     def walk(diff, pre_ancestry):
-        diff = iter(diff.items())
         for key, value in diff:
             new_key = key[4:]
             new_status = key[2]
             new_ancestry = os.path.join(pre_ancestry, new_key)
 
-            if is_nested_structure(value): #должен быть в каждой итерации
-                
-                if new_status != ' ':
-                    value = '[complex value]'
+            if is_nested_structure(value):
+                value = "[complex value]"
+
+                if new_status == ' ':
                     
-                walk(value, new_ancestry)
-                continue
-
-            if pre_ancestry == new_ancestry:
-                output.write(get_message(
-                                        pre_ancestry,
-                                        'updated',
-                                        (pre_value, value)
-                ))
-
-                continue
-
-            try: #блок для обычный итерации, где параметр был только удален или добавлен
-                next(diff)
-
-                output.write(get_message(
-                                        pre_ancestry,
-                                        pre_status,
-                                        pre_value
-                ))
-
-            except (StopIteration, TypeError): #блок для самой последней итерации
-                output.write(get_message(
-                    new_ancestry,
-                    new_status,
-                    value
-                ))
 
 
     walk(diff, '')
