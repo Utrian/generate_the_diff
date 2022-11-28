@@ -75,7 +75,5 @@ def generate_diff(
 
     unformatted_diff = walk(file_1, file_2)
     formatted_diff = format_name(unformatted_diff)
-    print(unformatted_diff)
-    print(formatted_diff)
 
-    return unformatted_diff, formatted_diff
+    return formatted_diff
