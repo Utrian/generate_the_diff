@@ -1,6 +1,6 @@
-from engine import cli
-from engine import parser
-from engine import gendiff
+from gendiff import cli
+from gendiff import parser
+from gendiff import gendiff
 
 
 def main():

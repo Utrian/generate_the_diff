@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Paul Nikolaevskiy <paulnikolaevsky@gmail.com>"]
 packages = [
-	{ include = "engine" },
+	{ include = "gendiff" },
 ]
 
 [tool.poetry.dependencies]
@@ -19,7 +19,7 @@ flake8 = "^5.0.4"
 ipykernel = "^6.16.0"
 
 [tool.poetry.scripts]
-gendiff = "engine.scripts.gendiff:main"
+gendiff = "gendiff.scripts.gendiff:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

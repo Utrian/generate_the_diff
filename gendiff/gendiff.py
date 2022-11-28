@@ -1,5 +1,5 @@
-import engine.formatters.stylish as ft_stylish
-from engine.tools import (
+import gendiff.formatters.stylish as ft_stylish
+from gendiff.tools import (
                             get_value, is_equal_items,
                             is_nested_structure, get_status
 )
@@ -75,7 +75,7 @@ def generate_diff(
 
     unformatted_diff = walk(file_1, file_2)
     formatted_diff = format_name(unformatted_diff)
-
+    print(unformatted_diff)
     print(formatted_diff)
 
     return unformatted_diff, formatted_diff

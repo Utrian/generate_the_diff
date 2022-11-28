@@ -1,9 +1,9 @@
 from os.path import abspath
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-import engine.formatters.stylish as ft_stylish
-import engine.formatters.plain as ft_plain
-import engine.formatters.json as ft_json
+import gendiff.formatters.stylish as ft_stylish
+import gendiff.formatters.plain as ft_plain
+import gendiff.formatters.json as ft_json
 
 
 def get_formatter(ft_name: str):

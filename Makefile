@@ -14,13 +14,13 @@ gendiff:
 	poetry run gendiff
 
 lint:
-	poetry run flake8 engine
+	poetry run flake8 gendiff
 
 pytest:
 	poetry run pytest
 
 test-coverage:
-	poetry run pytest --cov=engine --cov-report xml
+	poetry run pytest --cov=gendiff --cov-report xml
 
 coverage-missing:
-	poetry run pytest --cov-report term-missing --cov=engine
+	poetry run pytest --cov-report term-missing --cov=gendiff

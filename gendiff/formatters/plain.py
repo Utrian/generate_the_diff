@@ -1,6 +1,6 @@
 import os.path
 from typing import Union
-from engine.tools import is_nested_structure
+from gendiff.tools import is_nested_structure
 
 
 def make_message(ancestry, status, value: Union[any, tuple]) -> str:

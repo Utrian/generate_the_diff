@@ -1,4 +1,4 @@
-from engine.tools import (
+from gendiff.tools import (
                             normalize_bool,
                             is_nested_structure
 )

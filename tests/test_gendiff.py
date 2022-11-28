@@ -1,10 +1,10 @@
 from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from engine import gendiff
-import engine.formatters.stylish as ft_stylish
-import engine.formatters.plain as ft_plain
-import engine.formatters.json as ft_json
+from gendiff import gendiff
+import gendiff.formatters.stylish as ft_stylish
+import gendiff.formatters.plain as ft_plain
+import gendiff.formatters.json as ft_json
 
 
 @fixture

@@ -1,9 +1,9 @@
 from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from engine import tools
-from engine import parser
-import engine.formatters.plain as ft_plain
+from gendiff import tools
+from gendiff import parser
+import gendiff.formatters.plain as ft_plain
 
 
 @fixture
