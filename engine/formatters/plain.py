@@ -1,49 +1,98 @@
 import os.path
-from engine.tools import (
-                            normalize_bool,
-                            is_nested_structure
-)
+from typing import Union
+from engine.tools import is_nested_structure
 
 
-def get_message(ancestry, status, value):
-    common_part = f'Propertry {ancestry} was'
+def make_message(ancestry, status, value: Union[any, tuple]) -> str:
+    ancestry = ".".join(ancestry.split("/"))
+    common_part = f"Property '{ancestry}' was"
 
-    if status == 'updated':
+    if status == "updated":
         pre_value, new_value = value
-        return f'{common_part} updated. From {pre_value} to {new_value}'
+        return f"{common_part} updated. From {pre_value} to {new_value}\n"
 
-    if status == '+':
-        return f'{common_part} added with value: {value}'
-    
-    if status == '-':
-        return f'{common_part} removed'
+    if status == "+":
+        return f"{common_part} added with value: {value}\n"
+
+    if status == "-":
+        return f"{common_part} removed\n"
+
+
+def is_changed(pre_key: str, diff: dict):
+    wanted_key = f'  + {pre_key}'
+
+    if wanted_key in diff:
+        next_value = diff.get(wanted_key)
+
+        if is_nested_structure(next_value):
+            return '[complex value]'
+
+        return normalize_value(next_value)
+
+    return False
+
+
+def normalize_value(value):
+    if type(value) is bool:
+        if value is True:
+            return 'true'
+        return 'false'
+
+    if value is None:
+        return 'null'
+
+    return f"'{value}'"
 
 
 def plain(diff: dict, path_output='files/output.txt'):
     output = open(path_output, 'w')
 
-    pre_value = None
-    pre_status = None
-    pre_ancestry = None
+    def walk(diff, pre_ancestry, jump=False):
+        for key, value in diff.items():
 
-    def walk(diff, pre_ancestry):
-        for key, value in diff:
-            new_key = key[4:]
-            new_status = key[2]
-            new_ancestry = os.path.join(pre_ancestry, new_key)
+            if jump is True:
+                jump = False
+                continue
+
+            status = key[2]
+            name_key = key[4:]
+            message_value = normalize_value(value)
+            ancestry = os.path.join(pre_ancestry, name_key)
 
             if is_nested_structure(value):
-                value = "[complex value]"
+                message_value = "[complex value]"
 
-                if new_status == ' ':
-                    
+                if status == ' ':
+                    walk(value, ancestry)
 
+            if status == '+':
+                message = make_message(
+                                        ancestry, status,
+                                        message_value
+                )
+                output.write(message)
+
+            elif status == '-':
+                next_value_is_changed = is_changed(name_key, diff)
+
+                if next_value_is_changed is False:
+                    message = make_message(
+                                            ancestry, status,
+                                            message_value
+                    )
+                    output.write(message)
+
+                else:
+                    jump = True
+
+                    next_value = next_value_is_changed
+                    values = (message_value, next_value)
+
+                    message = make_message(ancestry, 'updated', values)
+                    output.write(message)
 
     walk(diff, '')
     output.close()
 
     with open(path_output, 'r') as f:
         return f.read()
-
-
-print(plain({'    common': {'  + follow': False, '    setting1': 'Value 1', '  - setting2': 200, '  - setting3': True, '  + setting3': None, '  + setting4': 'blah blah', '  + setting5': {'    key5': 'value5'}, '    setting6': {'    doge': {'  - wow': '', '  + wow': 'so much'}, '    key': 'value', '  + ops': 'vops'}}, '    group1': {'  - baz': 'bas', '  + baz': 'bars', '    foo': 'bar', '  - nest': {'    key': 'value'}, '  + nest': 'str'}, '  - group2': {'    abc': 12345, '    deep': {'    id': 45}}, '  + group3': {'    deep': {'    id': {'    number': 45}}, '    fee': 100500}}))

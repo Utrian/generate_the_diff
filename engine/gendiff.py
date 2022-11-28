@@ -1,14 +1,9 @@
-# import engine.formatters.stylish as ft_stylish
-# import engine.formatters.json as ft_json
-import engine.formatters.plain as ft_plain
+import engine.formatters.stylish as ft_stylish
 from engine.tools import (
                             get_value, is_equal_items,
                             is_nested_structure, get_status
 )
 
-def formatter():
-    def wrapper(format):
-        return format()
 
 def external_walk(file):
     diff = dict()
@@ -28,15 +23,15 @@ def external_walk(file):
 def generate_diff(
                 file_1,
                 file_2,
-                format_name=ft_plain.plain
+                format_name=ft_stylish.stylish
 ):
 
     def walk(file_1, file_2):
         diff = dict()
-        all_keys = sorted(list(
+        all_keys = sorted(
             [key for key in file_1] +
             [key for key in file_2 if key not in file_1]
-        ))
+        )
 
         for key in all_keys:
 
@@ -79,6 +74,8 @@ def generate_diff(
         return diff
 
     unformatted_diff = walk(file_1, file_2)
-    print(format_name(unformatted_diff))
+    formatted_diff = format_name(unformatted_diff)
 
-    return unformatted_diff
+    print(formatted_diff)
+
+    return unformatted_diff, formatted_diff

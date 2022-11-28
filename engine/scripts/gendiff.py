@@ -1,12 +1,12 @@
-from engine import parse_files
-from engine import tools
+from engine import cli
+from engine import parser
 from engine import gendiff
 
 
 def main():
-    args = parse_files.get_parsed_data()
-    first_file, second_file = tools.get_file_data(args)
-    gendiff.generate_diff(first_file, second_file)
+    args = cli.get_args()
+    first_file, second_file, formatter = parser.get_parsed_data(args)
+    gendiff.generate_diff(first_file, second_file, formatter)
 
 
 if __name__ == '__main__':

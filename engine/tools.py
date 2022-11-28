@@ -1,30 +1,3 @@
-from os.path import abspath
-from json import load as json_load
-from yaml import load as yaml_load, Loader as yaml_Loader
-
-
-def get_file_data(args) -> tuple:
-    abs_path_first_file = abspath(args.first_file)
-    abs_path_second_file = abspath(args.second_file)
-
-    first_file_format = abs_path_first_file.split('.')[1]
-    second_file_format = abs_path_second_file.split('.')[1]
-
-    if first_file_format == 'json':
-        first_file = json_load(open(abs_path_first_file))
-
-    elif first_file_format in ['yml', 'yaml']:
-        first_file = yaml_load(open(abs_path_first_file), Loader=yaml_Loader)
-
-    if second_file_format == 'json':
-        second_file = json_load(open(abs_path_second_file))
-
-    elif second_file_format in ['yml', 'yaml']:
-        second_file = yaml_load(open(abs_path_second_file), Loader=yaml_Loader)
-
-    return first_file, second_file
-
-
 def normalize_bool(value):
     if type(value) is bool:
         if value is True:
@@ -75,3 +48,7 @@ def is_equal_items(first_file, second_file, key):
         if get_value(first_file, key) == get_value(second_file, key):
             return True
     return False
+
+
+def is_not_equal_items(first_file, second_file, key):
+    return key in first_file and key in second_file

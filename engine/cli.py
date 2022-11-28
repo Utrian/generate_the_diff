@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 
-def get_parsed_data():
+def get_args():
     parser = ArgumentParser(
         description='Compares two '
         'configuration files and shows a difference.'
@@ -16,7 +16,12 @@ def get_parsed_data():
         nargs='?', type=str,
         default='files/json/second_file.json'
     )
-    parser.add_argument('-f', '--format', help='set format of output')
+    parser.add_argument(
+        '-f', '--format',
+        nargs='?', type=str,
+        default='stylish',
+        choices=['stylish', 'plain', 'json'],
+        help='set format of output')
 
     args = parser.parse_args()
     return args
