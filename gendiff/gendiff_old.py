@@ -1,6 +1,6 @@
 import gendiff.formatters.stylish as ft_stylish
 from gendiff.tools import (
-                            get_value, is_equal_items,
+                            get_value, is_unchanged_items,
                             is_nested_structure, get_status
 )
 
@@ -43,7 +43,7 @@ def generate_diff(
 
                 diff[get_status('equal') + key] = child
 
-            elif is_equal_items(file_1, file_2, key):
+            elif is_unchanged_items(file_1, file_2, key):
                 diff[get_status('equal') + key] = get_value(file_1, key)
 
             else:

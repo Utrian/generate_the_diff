@@ -1,7 +1,7 @@
 from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
-from gendiff import gendiff
+from gendiff import gendiff_with_formatter
 import gendiff.formatters.stylish as ft_stylish
 import gendiff.formatters.plain as ft_plain
 import gendiff.formatters.json as ft_json
@@ -101,7 +101,7 @@ def test_stylish_json(
                         json_second_file,
                         stylish_formatted_diff,
 ):
-    result_formatted_diff = gendiff.generate_diff(
+    result_formatted_diff = gendiff_with_formatter.generate_diff(
         json_first_file, json_second_file, ft_stylish.stylish
     )
 
@@ -113,7 +113,7 @@ def test_stylish_yaml(
                         yaml_second_file,
                         stylish_formatted_diff
 ):
-    result_formatted_diff = gendiff.generate_diff(
+    result_formatted_diff = gendiff_with_formatter.generate_diff(
         yaml_first_file, yaml_second_file, ft_stylish.stylish
     )
 
@@ -125,7 +125,7 @@ def test_plain_json(
                     json_second_file,
                     plain_formatted_diff
 ):
-    formatted_diff_json = gendiff.generate_diff(
+    formatted_diff_json = gendiff_with_formatter.generate_diff(
         json_first_file, json_second_file, ft_plain.plain
     )
 
@@ -137,7 +137,7 @@ def test_plain_yaml(
                     yaml_second_file,
                     plain_formatted_diff
 ):
-    formatted_diff_yaml = gendiff.generate_diff(
+    formatted_diff_yaml = gendiff_with_formatter.generate_diff(
         yaml_first_file, yaml_second_file, ft_plain.plain
     )
 
@@ -149,7 +149,7 @@ def test_diff_to_json_with_json_file(
                                     json_second_file,
                                     json_formatted_diff
 ):
-    formatted_diff_json = gendiff.generate_diff(
+    formatted_diff_json = gendiff_with_formatter.generate_diff(
         json_first_file, json_second_file, ft_json.diff_to_json
     )
 
@@ -161,7 +161,7 @@ def test_diff_to_json_with_yaml_file(
                                     yaml_second_file,
                                     json_formatted_diff
 ):
-    formatted_diff_yaml = gendiff.generate_diff(
+    formatted_diff_yaml = gendiff_with_formatter.generate_diff(
         yaml_first_file, yaml_second_file, ft_json.diff_to_json
     )
 

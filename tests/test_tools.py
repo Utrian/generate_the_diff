@@ -2,7 +2,7 @@ from pytest import fixture
 from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff import tools
-from gendiff import parser
+from gendiff import file_parser
 import gendiff.formatters.plain as ft_plain
 
 
@@ -65,8 +65,8 @@ def test_get_parsed_data(
     yaml_second_file,
 
 ):
-    json_result = parser.get_parsed_data(json_args)
-    yaml_result = parser.get_parsed_data(yaml_args)
+    json_result = file_parser.get_parsed_data(json_args)
+    yaml_result = file_parser.get_parsed_data(yaml_args)
     assert json_result == (json_first_file, json_second_file, ft_plain.plain)
     assert yaml_result == (yaml_first_file, yaml_second_file, ft_plain.plain)
 

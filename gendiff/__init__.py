@@ -1,4 +1,4 @@
-from gendiff.gendiff import generate_diff
+from gendiff_with_formatter import generate_diff
 
 
 __all__ = (

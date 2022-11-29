@@ -43,12 +43,39 @@ def is_nested_structure(key, *files):
     return isinstance(file[key], dict)
 
 
-def is_equal_items(first_file, second_file, key):
+def is_unchanged_items(first_file, second_file, key):
     if key in first_file and key in second_file:
         if get_value(first_file, key) == get_value(second_file, key):
             return True
     return False
 
 
-def is_not_equal_items(first_file, second_file, key):
+def is_changed_items(first_file, second_file, key):
     return key in first_file and key in second_file
+
+
+def make_leaf_structure(type, key, value):
+    return {'type': type, 'key': key, 'value': value}
+
+
+def make_nested_structure(type, key, children):
+    return {'type': type, 'key': key, 'children': children}
+
+
+def make_changed_structure(key, values):
+    result = {'type': 'changed', 'key': key}
+
+    if isinstance(values[0], list):
+        value1 = {'children': values[0]}
+    else:
+        value1 = {'value1': values[0]}
+
+    if isinstance(values[1], list):
+        value2 = {'children': values[1]}
+    else:
+        value2 = {'value2': values[1]}
+
+    result.update(value1)
+    result.update(value2)
+
+    return result

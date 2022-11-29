@@ -4,12 +4,17 @@ install:
 build:
 	poetry build
 
+build_install:
+	poetry build
+	python3 -m pip install dist/*.whl
+
 publish:
 	poetry publish --dry-run
 
 package-install:
 	python3 -m pip install --user dist/*.whl
 
+.PHONY: all gendiff clean
 gendiff:
 	poetry run gendiff
 
