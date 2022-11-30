@@ -4,8 +4,9 @@ install:
 build:
 	poetry build
 
-build_install:
+BI:
 	poetry build
+	poetry install
 	python3 -m pip install dist/*.whl
 
 publish:

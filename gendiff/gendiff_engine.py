@@ -1,4 +1,4 @@
-from tools import (
+from .tools import (
     get_value, is_unchanged_items,
     is_changed_items, is_nested_structure,
     make_nested_structure, make_leaf_structure,
@@ -36,7 +36,7 @@ def build_diff(file_1, file_2):
 
     for key in all_keys:
 
-        if is_nested_structure(key, file_1, file_2):  #all nested
+        if is_nested_structure(key, file_1, file_2):
             child1 = get_value(file_1, key)
             child2 = get_value(file_2, key)
 
@@ -45,13 +45,13 @@ def build_diff(file_1, file_2):
             diff.append(make_nested_structure('nested', key, children))
 
 
-        elif is_unchanged_items(file_1, file_2, key):  #unchanged (no nested)
+        elif is_unchanged_items(file_1, file_2, key):
             value = get_value(file_1, key)
 
             diff.append(make_leaf_structure('unchanged', key, value))
 
 
-        elif is_changed_items(file_1, file_2, key):  #changed (possibly 1 value is nested)
+        elif is_changed_items(file_1, file_2, key):
             values = list()
 
             if is_nested_structure(key, file_1):

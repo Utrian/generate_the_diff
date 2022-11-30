@@ -36,39 +36,25 @@ def yaml_second_file():
     )
 
 
-@fixture
-def json_args():
-    class args:
-        first_file = 'files/json/first_file.json'
-        second_file = 'files/json/second_file.json'
-        format = 'plain'
 
-    return args
-
-
-@fixture
-def yaml_args():
-    class args:
-        first_file = 'files/yaml/first_file.yaml'
-        second_file = 'files/yaml/second_file.yaml'
-        format = 'plain'
-
-    return args
 
 
 def test_get_parsed_data(
-    json_args,
-    yaml_args,
-    json_first_file,
-    json_second_file,
-    yaml_first_file,
-    yaml_second_file,
-
+                        json_first_file,
+                        json_second_file,
+                        yaml_first_file,
+                        yaml_second_file,
 ):
-    json_result = file_parser.get_parsed_data(json_args)
-    yaml_result = file_parser.get_parsed_data(yaml_args)
-    assert json_result == (json_first_file, json_second_file, ft_plain.plain)
-    assert yaml_result == (yaml_first_file, yaml_second_file, ft_plain.plain)
+    json1_path = 'tests/fixtures/json/first_file.json'
+    json2_path = 'tests/fixtures/json/second_file.json'
+    yaml1_path = 'tests/fixtures/yaml/first_file.yaml'
+    yaml2_path = 'tests/fixtures/yaml/second_file.yaml'
+
+    json_result = file_parser.get_parsed_data(json1_path, json2_path)
+    yaml_result = file_parser.get_parsed_data(yaml1_path, yaml2_path)
+
+    assert json_result == (json_first_file, json_second_file)
+    assert yaml_result == (yaml_first_file, yaml_second_file)
 
 
 def test_normalize_bool():

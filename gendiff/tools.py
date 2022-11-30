@@ -10,15 +10,17 @@ def normalize_bool(value):
     return value
 
 
-def get_value(file, key):
-    return file[key]
+def get_value(items: dict, key: str):
+    return items[key]
 
 
-def get_status(status):
+def get_status(status: str):
     statuses = {
-        'equal': '    ',
         'added': '  + ',
-        'deleted': '  - '
+        'deleted': '  - ',
+        'nested': '    ',
+        'unchanged': '    ',
+        'changed': ('  - ', '  + ')
     }
     return statuses[status]
 

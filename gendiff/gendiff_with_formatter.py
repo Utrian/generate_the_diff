@@ -7,4 +7,4 @@ def generate_diff(path_file1, path_file2, formatter):
 
     diff = gendiff_engine.build_diff(file_1, file_2)
 
-    return diff
+    return formatter(diff)
