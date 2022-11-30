@@ -1,11 +1,20 @@
-def normalize_bool(value):
+def normalize_bool(value, mode='not_plain'):
     if type(value) is bool:
         if value is True:
             return 'true'
         return 'false'
 
-    if value is None:
+    elif value is None:
         return 'null'
+
+    if mode == 'plain':
+        if isinstance(value, list):
+            return '[complex value]'
+
+        elif value in ('true', 'false', 'null'):
+            return value
+
+        return f"'{value}'"
 
     return value
 
@@ -25,24 +34,23 @@ def get_status(status: str):
     return statuses[status]
 
 
-def is_nested_structure(key, *files):
-    if len(files) == 2:
-        first_file, second_file = files
+def is_nested_structure(value, *dictionaries):
+    if len(dictionaries) == 2:
+        first_file, second_file = dictionaries
 
-        if key in first_file and key in second_file:
+        if value in first_file and value in second_file:
             return (
-                isinstance(get_value(first_file, key), dict) and
-                isinstance(get_value(second_file, key), dict)
+                isinstance(get_value(first_file, value), dict) and
+                isinstance(get_value(second_file, value), dict)
             )
         return False
 
-    if files == ():
-        value = key
+    if dictionaries == ():
         return isinstance(value, dict)
 
-    file = files[0]
+    file = dictionaries[0]
 
-    return isinstance(file[key], dict)
+    return isinstance(file[value], dict)
 
 
 def is_unchanged_items(first_file, second_file, key):

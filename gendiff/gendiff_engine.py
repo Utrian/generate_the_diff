@@ -1,32 +1,32 @@
 from .tools import (
     get_value, is_unchanged_items,
     is_changed_items, is_nested_structure,
-    make_nested_structure, make_leaf_structure,
-    make_changed_structure
+    normalize_bool, make_nested_structure,
+    make_leaf_structure, make_changed_structure
 )
 
 
-def external_walk(file):
+def external_walk(dict_):
     diff = list()
-    all_keys = [key for key in file]
+    all_keys = [key for key in dict_]
 
     for key in all_keys:
-        if is_nested_structure(key, file):
-            child = get_value(file, key)
+        if is_nested_structure(key, dict_):
+            child = get_value(dict_, key)
             children = external_walk(child)
 
             diff.append(make_nested_structure('unchanged', key, children))
 
             continue
 
-        value = get_value(file, key)
+        value = normalize_bool(get_value(dict_, key))
 
         diff.append(make_leaf_structure('unchanged', key, value))
 
     return diff
 
 
-def build_diff(file_1, file_2):
+def build_diff(file_1: dict, file_2: dict):
     diff = list()
 
     all_keys = sorted(
@@ -46,7 +46,7 @@ def build_diff(file_1, file_2):
 
 
         elif is_unchanged_items(file_1, file_2, key):
-            value = get_value(file_1, key)
+            value = normalize_bool(get_value(file_1, key))
 
             diff.append(make_leaf_structure('unchanged', key, value))
 
@@ -59,7 +59,7 @@ def build_diff(file_1, file_2):
                 values.append(children)
 
             else:
-                value1 = get_value(file_1, key)
+                value1 = normalize_bool(get_value(file_1, key))
                 values.append(value1)
 
             if is_nested_structure(key, file_2):
@@ -67,7 +67,7 @@ def build_diff(file_1, file_2):
                 values.append(children)
 
             else:
-                value2 = get_value(file_2, key)
+                value2 = normalize_bool(get_value(file_2, key))
                 values.append(value2)
 
             diff.append(make_changed_structure(key, values))
@@ -80,7 +80,7 @@ def build_diff(file_1, file_2):
                 diff.append(make_nested_structure('deleted', key, children))
 
             else:
-                value = get_value(file_1, key)
+                value = normalize_bool(get_value(file_1, key))
 
                 diff.append(make_leaf_structure('deleted', key, value))
 
@@ -92,7 +92,7 @@ def build_diff(file_1, file_2):
                 diff.append(make_nested_structure('added', key, children))
 
             else:
-                value = get_value(file_2, key)
+                value = normalize_bool(get_value(file_2, key))
 
                 diff.append(make_leaf_structure('added', key, value))
 

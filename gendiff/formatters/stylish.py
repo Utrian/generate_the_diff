@@ -1,12 +1,7 @@
-from gendiff.tools import (
-                            get_value,
-                            get_status,
-                            normalize_bool
-)
+from gendiff.tools import get_value, get_status
 
 
 def write_line(output_file, indent, type, key, value):
-    value = normalize_bool(value)
     visual_type = get_status(type)
 
     output_file.write(f"{indent}{visual_type}{key}: {value}\n")

@@ -1,98 +1,76 @@
 import os.path
 from typing import Union
-from gendiff.tools import is_nested_structure
+from gendiff.tools import (
+                            get_value,
+                            normalize_bool
+)
 
 
-def make_message(ancestry, status, value: Union[any, tuple]) -> str:
+def write_message(output_file, ancestry, type, value: Union[any, list]):
     ancestry = ".".join(ancestry.split("/"))
     common_part = f"Property '{ancestry}' was"
 
-    if status == "updated":
-        pre_value, new_value = value
-        return f"{common_part} updated. From {pre_value} to {new_value}\n"
+    if type == 'changed':
+        value1, value2 = value
+        value1 = normalize_bool(value1, 'plain')
+        value2 = normalize_bool(value2, 'plain')
 
-    if status == "+":
-        return f"{common_part} added with value: {value}\n"
+        message = f'{common_part} updated. From {value1} to {value2}\n'
+        output_file.write(message)
+        return
+    
+    value = normalize_bool(value, 'plain')
 
-    if status == "-":
-        return f"{common_part} removed\n"
+    if type == 'added':
+        message = f'{common_part} added with value: {value}\n'
+        output_file.write(message)
 
-
-def is_changed(pre_key: str, diff: dict):
-    wanted_key = f'  + {pre_key}'
-
-    if wanted_key in diff:
-        next_value = diff.get(wanted_key)
-
-        if is_nested_structure(next_value):
-            return '[complex value]'
-
-        return normalize_value(next_value)
-
-    return False
+    elif type == 'deleted':
+        message = f'{common_part} removed\n'
+        output_file.write(message)
 
 
-def normalize_value(value):
-    if type(value) is bool:
-        if value is True:
-            return 'true'
-        return 'false'
 
-    if value is None:
-        return 'null'
-
-    return f"'{value}'"
-
-
-def plain(diff: dict, path_output='files/output.txt'):
+def plain(diff: list, path_output='files/output.txt'):
     output = open(path_output, 'w')
 
-    def walk(diff, pre_ancestry, jump=False):
-        for key, value in diff.items():
+    def walk(diff, ancestry):
+        for internal_view in diff:
+            
+            type = get_value(internal_view, 'type')
+            key = get_value(internal_view, 'key')
+            ancestry = os.path.join(ancestry, key)
 
-            if jump is True:
-                jump = False
-                continue
+            if type == 'nested':
+                children = get_value(internal_view, 'children')
+                walk(children, ancestry)
 
-            status = key[2]
-            name_key = key[4:]
-            message_value = normalize_value(value)
-            ancestry = os.path.join(pre_ancestry, name_key)
+            elif type == 'changed':
+                values = []
 
-            if is_nested_structure(value):
-                message_value = "[complex value]"
+                if 'value1' in internal_view:
+                    values.append(get_value(internal_view, 'value1'))
+                
+                if 'children' in internal_view:
+                    values.append(get_value(internal_view, 'children'))
+                
+                if 'value2' in internal_view:
+                    values.append(get_value(internal_view, 'value2'))
+                
+                write_message(output, ancestry, type, values)
 
-                if status == ' ':
-                    walk(value, ancestry)
+            elif type in ('added', 'deleted'):
+                if 'value' in internal_view:
+                    value = get_value(internal_view, 'value')
 
-            if status == '+':
-                message = make_message(
-                                        ancestry, status,
-                                        message_value
-                )
-                output.write(message)
+                elif 'children' in internal_view:
+                    value = get_value(internal_view, 'children')
 
-            elif status == '-':
-                next_value_is_changed = is_changed(name_key, diff)
-
-                if next_value_is_changed is False:
-                    message = make_message(
-                                            ancestry, status,
-                                            message_value
-                    )
-                    output.write(message)
-
-                else:
-                    jump = True
-
-                    next_value = next_value_is_changed
-                    values = (message_value, next_value)
-
-                    message = make_message(ancestry, 'updated', values)
-                    output.write(message)
-
+                write_message(output, ancestry, type, value)
+    
     walk(diff, '')
     output.close()
 
     with open(path_output, 'r') as f:
         return f.read()
+    
