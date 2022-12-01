@@ -16,6 +16,12 @@ def get_data(path_file, format):
             parsed_data = yaml_load(open(path_file), Loader=yaml_Loader)
             return parsed_data if parsed_data is not None else {}
 
+    raise TypeError(
+        'The file extension is not supported.\n\n'
+        'Make sure that the selected files have'
+        'the extension: json, yaml or yml.'
+    )
+
 
 def get_parsed_data(path_file1, path_file2) -> tuple:
 

@@ -21,7 +21,8 @@ def get_args():
         nargs='?', type=str,
         default='stylish',
         choices=['stylish', 'plain', 'json'],
-        help='set format of output')
+        help='set format of output'
+    )
 
     args = parser.parse_args()
     return args
