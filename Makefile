@@ -15,6 +15,9 @@ publish:
 package-install:
 	python3 -m pip install --user dist/*.whl
 
+reinstall:
+	python -m pip install --force-reinstall dist/*.whl
+
 .PHONY: all gendiff clean
 gendiff:
 	poetry run gendiff

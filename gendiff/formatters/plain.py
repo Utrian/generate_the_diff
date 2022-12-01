@@ -1,9 +1,6 @@
 import os.path
 from typing import Union
-from gendiff.tools import (
-                            get_value,
-                            normalize_bool
-)
+from gendiff.tools import (get_value, normalize_bool)
 
 
 def write_message(output_file, ancestry, type, value: Union[any, list]):
@@ -39,11 +36,11 @@ def plain(diff: list, path_output='files/output.txt'):
             
             type = get_value(internal_view, 'type')
             key = get_value(internal_view, 'key')
-            ancestry = os.path.join(ancestry, key)
+            cur_ancestry = os.path.join(ancestry, key)
 
             if type == 'nested':
                 children = get_value(internal_view, 'children')
-                walk(children, ancestry)
+                walk(children, cur_ancestry)
 
             elif type == 'changed':
                 values = []
@@ -57,7 +54,7 @@ def plain(diff: list, path_output='files/output.txt'):
                 if 'value2' in internal_view:
                     values.append(get_value(internal_view, 'value2'))
                 
-                write_message(output, ancestry, type, values)
+                write_message(output, cur_ancestry, type, values)
 
             elif type in ('added', 'deleted'):
                 if 'value' in internal_view:
@@ -66,11 +63,10 @@ def plain(diff: list, path_output='files/output.txt'):
                 elif 'children' in internal_view:
                     value = get_value(internal_view, 'children')
 
-                write_message(output, ancestry, type, value)
+                write_message(output, cur_ancestry, type, value)
     
     walk(diff, '')
     output.close()
 
     with open(path_output, 'r') as f:
         return f.read()
-    
