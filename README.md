@@ -4,7 +4,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d7f5da7657fe940d6af3/test_coverage)](https://codeclimate.com/github/Utrian/python-project-50/test_coverage)
 
 
-# Gendiff - compare two json and/or yaml files
+# **Gendiff** - compare two json and/or yaml files
 
 ## **About**
 You can get a comparison of two json/yaml files - different formats can be compared too!
@@ -54,15 +54,19 @@ gendiff -f stylish files/json/first_file.json files/yaml/second_file.yaml
 ```
 
 ### **Running gendiff in stylish format mode**
-It is not necessary to specify the format to use it.
 
 *The conditional both-values:*
-* '-' - if the parameter was deleted from the first file;
-* '+' - if the parameter was added in second_file;
-* ' ' - if the parameter has not been changed or if it is a nested string that is in both files;
-* if the file value has been changed, the first value in the output will be the value from the first file, then the second.
+symbol | description
+:------|:------------
+\-     | if the parameter was deleted from the first file;
+\+     | if the parameter was added in second_file;
+  || (blank) if the parameter has not been changed or if it is a nested string that is in both files;
+   
+If the file value has been changed, the first value in the output will be the value from the first file, then the second.
   
 **Command**
+(It is not necessary to specify the format to use it.)
+
 ```bash
 gendiff path_first_file path_second_file
 ```
@@ -79,7 +83,7 @@ gendiff path_first_file path_second_file
 }
 ```
 
-### Running gendiff in plain format mode
+### **Running gendiff in plain format mode**
 Only parameters that have been changed are shown. Unchanged parameters and nested structures that are in both files are not shown.
 
 **Command**
@@ -95,7 +99,7 @@ Property 'common.setting3' was updated. From true to null
 Property 'common.setting4' was added with value: 'blah blah'
 ```
 
-### Running gendiff in json format mode
+### **Running gendiff in json format mode**
 In this format you can see the internal representation of the difference of the two files.
 
 **Command**
