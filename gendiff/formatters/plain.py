@@ -3,7 +3,7 @@ from typing import Union
 from gendiff.tools import (get_value, normalize_bool)
 
 
-def write_message(output_file, ancestry, type, value: Union[any, list]):
+def write_message(ancestry, type, value: Union[any, list]):
     ancestry = ".".join(ancestry.split("/"))
     common_part = f"Property '{ancestry}' was"
 
@@ -12,23 +12,22 @@ def write_message(output_file, ancestry, type, value: Union[any, list]):
         value1 = normalize_bool(value1, 'plain')
         value2 = normalize_bool(value2, 'plain')
 
-        message = f'{common_part} updated. From {value1} to {value2}\n'
-        output_file.write(message)
-        return
+        message = f'{common_part} updated. From {value1} to {value2}'
+        return message
 
     value = normalize_bool(value, 'plain')
 
     if type == 'added':
-        message = f'{common_part} added with value: {value}\n'
-        output_file.write(message)
+        message = f'{common_part} added with value: {value}'
+        return message
 
     elif type == 'deleted':
-        message = f'{common_part} removed\n'
-        output_file.write(message)
+        message = f'{common_part} removed'
+        return message
 
 
 def plain(diff: list, path_output='files/output.txt'):
-    output = open(path_output, 'w')
+    formatted_diff = []
 
     def walk(diff, ancestry):
         for internal_view in diff:
@@ -53,7 +52,9 @@ def plain(diff: list, path_output='files/output.txt'):
                 if 'value2' in internal_view:
                     values.append(get_value(internal_view, 'value2'))
 
-                write_message(output, cur_ancestry, type, values)
+                formatted_diff.append(
+                    write_message(cur_ancestry, type, values)
+                )
 
             elif type in ('added', 'deleted'):
                 if 'value' in internal_view:
@@ -62,10 +63,12 @@ def plain(diff: list, path_output='files/output.txt'):
                 elif 'children' in internal_view:
                     value = get_value(internal_view, 'children')
 
-                write_message(output, cur_ancestry, type, value)
+                formatted_diff.append(
+                    write_message(cur_ancestry, type, value)
+                )
 
     walk(diff, '')
-    output.close()
 
-    with open(path_output, 'r') as f:
-        return f.read()
+    result = '\n'.join(formatted_diff)
+
+    return result

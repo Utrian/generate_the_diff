@@ -1,26 +1,25 @@
 from gendiff.tools import get_value, get_status
 
 
-def write_line(output_file, indent, type, key, value):
+def write_line(indent, type, key, value):
     visual_type = get_status(type)
 
-    output_file.write(f"{indent}{visual_type}{key}: {value}\n")
+    return f"{indent}{visual_type}{key}: {value}"
 
 
-def write_close_bracket(output_file, indent='', default_indent=0):
+def write_close_bracket(indent='', default_indent=0):
     closing_bracket_indent = ' ' * (len(indent) + default_indent)
     close_bracket = f"{closing_bracket_indent}{'}'}"
 
-    output_file.write(f"{close_bracket}\n")
+    return f"{close_bracket}"
 
 
-def stylish(diff: list, path_output='files/output.txt'):
+def stylish(diff: list):
     spaces = "    "
     open_bracket = '{'
     default_indent = 4
 
-    output = open(path_output, 'w')
-    output.write('{\n')
+    formatted_diff = [open_bracket]
 
     def walk(diff, depth=0):
         for internal_view in diff:
@@ -30,14 +29,16 @@ def stylish(diff: list, path_output='files/output.txt'):
 
             if 'value' in internal_view:
                 value = get_value(internal_view, 'value')
-                write_line(output, indent, type, key, value)
+                formatted_diff.append(write_line(indent, type, key, value))
 
             elif 'children' in internal_view and type != 'changed':
                 children = get_value(internal_view, 'children')
 
-                write_line(output, indent, type, key, open_bracket)
+                formatted_diff.append(write_line(indent, type, key, open_bracket))
                 walk(children, depth + 1)
-                write_close_bracket(output, indent, default_indent)
+                formatted_diff.append(
+                    write_close_bracket(indent, default_indent)
+                )
 
                 continue
 
@@ -46,7 +47,7 @@ def stylish(diff: list, path_output='files/output.txt'):
 
             if 'value1' in internal_view:
                 value1 = get_value(internal_view, 'value1')
-                write_line(output, indent, type1, key, value1)
+                formatted_diff.append(write_line(indent, type1, key, value1))
 
             if 'children' in internal_view:
                 child_type = type1
@@ -58,19 +59,20 @@ def stylish(diff: list, path_output='files/output.txt'):
                 closing_bracket_indent = ' ' * (len(indent) + default_indent)
                 close_bracket = f"{closing_bracket_indent}{'}'}"
 
-                write_line(output, indent, child_type, key, open_bracket)
+                formatted_diff.append(
+                    write_line(indent, child_type, key, open_bracket)
+                )
                 walk(children, depth + 1)
-                output.write(f"{close_bracket}\n")
+                formatted_diff.append(f"{close_bracket}")
 
             if 'value2' in internal_view:
                 value2 = get_value(internal_view, 'value2')
 
-                write_line(output, indent, type2, key, value2)
+                formatted_diff.append(write_line(indent, type2, key, value2))
 
     walk(diff)
 
-    write_close_bracket(output)
-    output.close()
+    formatted_diff.append(write_close_bracket())
 
-    with open(path_output, 'r') as f:
-        return f.read()
+    result = '\n'.join(formatted_diff)
+    return result

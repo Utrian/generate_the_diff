@@ -11,7 +11,7 @@ def normalize_bool(value, mode='not_plain'):
         if isinstance(value, list):
             return '[complex value]'
 
-        elif value in ('true', 'false', 'null'):
+        elif value in ('true', 'false', 'null', 0):
             return value
 
         return f"'{value}'"

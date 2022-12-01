@@ -1,4 +1,5 @@
-from pytest import fixture
+import os
+import pytest
 from gendiff.gendiff_with_formatter import generate_diff
 from gendiff.gendiff_engine import build_diff
 from gendiff.file_parser import get_parsed_data
@@ -7,155 +8,88 @@ import gendiff.formatters.plain as ft_plain
 import gendiff.formatters.json as ft_json
 
 
-@fixture
-def json_first_file():
-    return 'tests/fixtures/json/first_file.json'
+def get_path(parent, file):
+    return os.path.join('tests', 'fixtures', parent, file)
 
 
-@fixture
-def json_second_file():
-    return 'tests/fixtures/json/second_file.json'
-
-
-@fixture
-def yaml_first_file():
-    return 'tests/fixtures/yaml/first_file.yaml'
-
-
-@fixture
-def yaml_second_file():
-    return 'tests/fixtures/yaml/second_file.yaml'
-
-
-@fixture
-def unformatted_diff():
-    with open('tests/fixtures/output/unformatted_diff.txt') as f:
-        return f.read()
-
-
-@fixture
-def stylish_formatted_diff():
-    with open('tests/fixtures/output/stylish_formatted_diff.txt') as f:
-        return f.read()
-
-
-@fixture
-def plain_formatted_diff():
-    with open('tests/fixtures/output/plain_formatted_diff.txt') as f:
-        return f.read()
-
-
-@fixture
-def json_formatted_diff():
-    with open('tests/fixtures/output/json_formatted_diff.txt') as f:
-        return f.read()
-
-
-@fixture
-def parsed_json():
-    json1_path = 'tests/fixtures/json/first_file.json'
-    json2_path = 'tests/fixtures/json/second_file.json'
-    return get_parsed_data(json1_path, json2_path)
-
-
-@fixture
-def parsed_yaml():
-    yaml1_path = 'tests/fixtures/yaml/first_file.yaml'
-    yaml2_path = 'tests/fixtures/yaml/second_file.yaml'
-    return get_parsed_data(yaml1_path, yaml2_path)
-
-
-def test_build_diff_json(parsed_json, unformatted_diff):
-    json1, json2 = parsed_json
-    unformatted_diff_json = build_diff(json1, json2)
-
-    assert str(unformatted_diff_json) == unformatted_diff
-
-
-def test_generate_diff_jaml(parsed_yaml, unformatted_diff):
-    yaml1, yaml2 = parsed_yaml
-    unformatted_diff_yaml = build_diff(yaml1, yaml2)
-
-    assert str(unformatted_diff_yaml) == unformatted_diff
-
-
-def test_stylish_json(
-                        json_first_file,
-                        json_second_file,
-                        stylish_formatted_diff
+@pytest.mark.parametrize(
+    "fixtura_parent, test_file1, test_file2, formatter, expected",
+    [
+        pytest.param(
+            'json',
+            'arf_file1.json',
+            'arf_file2.json',
+            'stylish',
+            'arf_result_stylish',
+            id='arf stylish recursive json comparison'
+        ),
+        pytest.param(
+            'yaml',
+            'arf_file1.yml',
+            'arf_file2.yml',
+            'stylish',
+            'arf_result_stylish',
+            id='arf stylish recursive yml comparison'
+        ),
+        pytest.param(
+            'json',
+            'first_file.json',
+            'second_file.json',
+            'stylish',
+            'stylish_formatted_diff.txt',
+            id='stylish recursive json comparison'
+        ),
+        pytest.param(
+            'yaml',
+            'first_file.yaml',
+            'second_file.yaml',
+            'stylish',
+            'stylish_formatted_diff.txt',
+            id='stylish recursive yaml comparison'
+        ),
+        pytest.param(
+            'json',
+            'arf_file1.json',
+            'arf_file2.json',
+            'plain',
+            'arf_result_plain',
+            id='arf plain recursive json comparison'
+        ),
+        pytest.param(
+            'yaml',
+            'arf_file1.yml',
+            'arf_file2.yml',
+            'plain',
+            'arf_result_plain',
+            id='arf plain recursive yml comparison'
+        ),
+        pytest.param(
+            'json',
+            'first_file.json',
+            'second_file.json',
+            'plain',
+            'plain_formatted_diff.txt',
+            id='plain recursive json comparison'
+        ),
+        pytest.param(
+            'yaml',
+            'first_file.yaml',
+            'second_file.yaml',
+            'plain',
+            'plain_formatted_diff.txt',
+            id='plain recursive yaml comparison'
+        ),
+    ],
+)
+def test_generate_diff(
+    fixtura_parent, test_file1,
+    test_file2, formatter, expected
 ):
-    result_formatted_diff = generate_diff(
-                                        json_first_file,
-                                        json_second_file,
-                                        ft_stylish.stylish
-    )
+    expected_path = get_path('output', expected)
+    with open(expected_path, 'r') as f:
+        test_path1 = get_path(fixtura_parent, test_file1)
+        test_path2 = get_path(fixtura_parent, test_file2)
 
-    assert result_formatted_diff == stylish_formatted_diff
-
-
-def test_stylish_yaml(
-                        yaml_first_file,
-                        yaml_second_file,
-                        stylish_formatted_diff
-):
-    result_formatted_diff = generate_diff(
-                                        yaml_first_file,
-                                        yaml_second_file,
-                                        ft_stylish.stylish
-    )
-
-    assert result_formatted_diff == stylish_formatted_diff
-
-
-def test_plain_json(
-                    json_first_file,
-                    json_second_file,
-                    plain_formatted_diff
-):
-    result_formatted_diff = generate_diff(
-                                        json_first_file,
-                                        json_second_file,
-                                        ft_plain.plain
-    )
-
-    assert result_formatted_diff == plain_formatted_diff
-
-
-def test_plain_yaml(
-                    yaml_first_file,
-                    yaml_second_file,
-                    plain_formatted_diff
-):
-    result_formatted_diff = generate_diff(
-                                        yaml_first_file,
-                                        yaml_second_file,
-                                        ft_plain.plain
-    )
-
-    assert result_formatted_diff == plain_formatted_diff
-
-
-def test_diff_to_json_with_json_file(
-                                    json_first_file,
-                                    json_second_file,
-                                    json_formatted_diff
-):
-    formatted_diff_json = generate_diff(
-                                        json_first_file,
-                                        json_second_file,
-                                        ft_json.diff_to_json
-    )
-
-    assert formatted_diff_json == json_formatted_diff
-
-
-def test_diff_to_json_with_yaml_file(
-                                    yaml_first_file,
-                                    yaml_second_file,
-                                    json_formatted_diff
-):
-    formatted_diff_yaml = generate_diff(
-        yaml_first_file, yaml_second_file, ft_json.diff_to_json
-    )
-
-    assert formatted_diff_yaml == json_formatted_diff
+        expected_result = f.read()
+        function_result = generate_diff(test_path1, test_path2, formatter)
+        assert function_result == expected_result
