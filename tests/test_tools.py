@@ -3,7 +3,6 @@ from json import load as json_load
 from yaml import load as yaml_load, Loader as yaml_Loader
 from gendiff import tools
 from gendiff import file_parser
-import gendiff.formatters.plain as ft_plain
 
 
 @fixture
@@ -34,9 +33,6 @@ def yaml_second_file():
         'tests/fixtures/yaml/second_file.yaml'),
         Loader=yaml_Loader
     )
-
-
-
 
 
 def test_get_parsed_data(

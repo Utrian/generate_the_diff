@@ -15,7 +15,7 @@ def write_message(output_file, ancestry, type, value: Union[any, list]):
         message = f'{common_part} updated. From {value1} to {value2}\n'
         output_file.write(message)
         return
-    
+
     value = normalize_bool(value, 'plain')
 
     if type == 'added':
@@ -27,13 +27,12 @@ def write_message(output_file, ancestry, type, value: Union[any, list]):
         output_file.write(message)
 
 
-
 def plain(diff: list, path_output='files/output.txt'):
     output = open(path_output, 'w')
 
     def walk(diff, ancestry):
         for internal_view in diff:
-            
+
             type = get_value(internal_view, 'type')
             key = get_value(internal_view, 'key')
             cur_ancestry = os.path.join(ancestry, key)
@@ -47,13 +46,13 @@ def plain(diff: list, path_output='files/output.txt'):
 
                 if 'value1' in internal_view:
                     values.append(get_value(internal_view, 'value1'))
-                
+
                 if 'children' in internal_view:
                     values.append(get_value(internal_view, 'children'))
-                
+
                 if 'value2' in internal_view:
                     values.append(get_value(internal_view, 'value2'))
-                
+
                 write_message(output, cur_ancestry, type, values)
 
             elif type in ('added', 'deleted'):
@@ -64,7 +63,7 @@ def plain(diff: list, path_output='files/output.txt'):
                     value = get_value(internal_view, 'children')
 
                 write_message(output, cur_ancestry, type, value)
-    
+
     walk(diff, '')
     output.close()
 

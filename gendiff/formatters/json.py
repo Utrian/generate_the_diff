@@ -1,5 +1,5 @@
 import json
 
 
-def diff_to_json(diff: dict):
-    return json.dumps(diff, indent=2)
+def diff_to_json(diff: list):
+    return json.dumps(diff)

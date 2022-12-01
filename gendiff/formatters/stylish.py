@@ -53,15 +53,15 @@ def stylish(diff: list, path_output='files/output.txt'):
 
                 if 'value1' in internal_view:
                     child_type = type2
-                
+
                 children = get_value(internal_view, 'children')
                 closing_bracket_indent = ' ' * (len(indent) + default_indent)
                 close_bracket = f"{closing_bracket_indent}{'}'}"
-                
+
                 write_line(output, indent, child_type, key, open_bracket)
                 walk(children, depth + 1)
                 output.write(f"{close_bracket}\n")
-            
+
             if 'value2' in internal_view:
                 value2 = get_value(internal_view, 'value2')
 

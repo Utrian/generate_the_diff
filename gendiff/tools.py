@@ -28,8 +28,7 @@ def get_status(status: str):
         'added': '  + ',
         'deleted': '  - ',
         'nested': '    ',
-        'unchanged': '    ',
-        'changed': ('  - ', '  + ')
+        'unchanged': '    '
     }
     return statuses[status]
 
@@ -64,16 +63,16 @@ def is_changed_items(first_file, second_file, key):
     return key in first_file and key in second_file
 
 
-def make_leaf_structure(type, key, value):
-    return {'type': type, 'key': key, 'value': value}
+def make_leaf_structure(key, type, value):
+    return {'key': key, 'type': type, 'value': value}
 
 
-def make_nested_structure(type, key, children):
-    return {'type': type, 'key': key, 'children': children}
+def make_nested_structure(key, type, children):
+    return {'key': key, 'type': type, 'children': children}
 
 
 def make_changed_structure(key, values):
-    result = {'type': 'changed', 'key': key}
+    result = {'key': key, 'type': 'changed'}
 
     if isinstance(values[0], list):
         value1 = {'children': values[0]}
