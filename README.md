@@ -53,7 +53,7 @@ They can be used like this:
 gendiff -f stylish files/json/first_file.json files/yaml/second_file.yaml
 ```
 
-### **Running gendiff in stylish format mode**
+### **Stylish format mode**
 
 *The conditional both-values:*
 symbol | description
@@ -83,7 +83,7 @@ gendiff path_first_file path_second_file
 }
 ```
 
-### **Running gendiff in plain format mode**
+### **Plain format mode**
 Only parameters that have been changed are shown. Unchanged parameters and nested structures that are in both files are not shown.
 
 **Command**
@@ -99,7 +99,7 @@ Property 'common.setting3' was updated. From true to null
 Property 'common.setting4' was added with value: 'blah blah'
 ```
 
-### **Running gendiff in json format mode**
+### **Json format mode**
 In this format you can see the internal representation of the difference of the two files.
 
 **Command**
