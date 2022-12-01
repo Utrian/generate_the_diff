@@ -30,8 +30,7 @@ def build_diff(file_1: dict, file_2: dict):
     diff = list()
 
     all_keys = sorted(
-                    [key for key in file_1] +
-                    [key for key in file_2 if key not in file_1]
+        [key for key in file_1] + [key for key in file_2 if key not in file_1]
     )
 
     for key in all_keys:

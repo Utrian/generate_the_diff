@@ -39,8 +39,8 @@ def is_nested_structure(value, *dictionaries):
 
         if value in first_file and value in second_file:
             return (
-                isinstance(get_value(first_file, value), dict) and
-                isinstance(get_value(second_file, value), dict)
+                isinstance(get_value(first_file, value), dict)
+                and isinstance(get_value(second_file, value), dict)
             )
         return False
 

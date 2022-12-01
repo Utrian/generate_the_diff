@@ -25,9 +25,9 @@ def main():
 
     print(
         generate_diff(
-                        abs_path_file_1,
-                        abs_path_file_2,
-                        formatter
+            abs_path_file_1,
+            abs_path_file_2,
+            formatter
         )
     )
 
