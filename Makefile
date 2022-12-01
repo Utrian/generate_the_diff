@@ -4,11 +4,6 @@ install:
 build:
 	poetry build
 
-BI:
-	poetry build
-	poetry install
-	python3 -m pip install dist/*.whl
-
 publish:
 	poetry publish --dry-run
 
