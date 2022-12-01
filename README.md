@@ -50,7 +50,7 @@ There are test files for you, their paths:
   
 They can be used like this:
 ```bash
-gendiff -f files/json/first_file.json files/yaml/second_file.yaml
+gendiff -f stylish files/json/first_file.json files/yaml/second_file.yaml
 ```
 
 ### **Running gendiff in stylish format mode**
