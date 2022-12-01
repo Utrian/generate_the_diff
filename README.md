@@ -4,6 +4,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d7f5da7657fe940d6af3/test_coverage)](https://codeclimate.com/github/Utrian/python-project-50/test_coverage)
 
 
-### [Video example of program operation](https://asciinema.org/a/4UOODJn7h4motEJQQlMXuwScV)
-
-[testing argparse](https://jugmac00.github.io/blog/testing-argparse-applications-the-better-way/)
+# Gendiff - compare two json and/or yaml files.

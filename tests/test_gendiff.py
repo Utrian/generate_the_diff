@@ -88,3 +88,46 @@ def test_generate_diff(
         expected_result = f.read()
         function_result = generate_diff(test_path1, test_path2, formatter)
         assert function_result == expected_result
+
+
+def test_generate_diff_mix_file_types():
+    stylish_expected_path = get_path('output', 'arf_result_stylish')
+    plain_expected_path = get_path('output', 'arf_result_plain')
+
+    with open(stylish_expected_path, 'r') as st_file:
+        test_path1 = get_path('json', 'arf_file1.json')
+        test_path2 = get_path('yaml', 'arf_file2.yml')
+
+        expected_result = st_file.read()
+        function_result = generate_diff(test_path1, test_path2, 'stylish')
+        assert function_result == expected_result
+
+    with open(plain_expected_path, 'r') as pl_file:
+        test_path1 = get_path('yaml', 'arf_file1.yml')
+        test_path2 = get_path('json', 'arf_file2.json')
+
+        expected_result = pl_file.read()
+        function_result = generate_diff(test_path1, test_path2, 'plain')
+        assert function_result == expected_result
+
+
+def test_generate_diff_with_empty_file():
+    stylish_expected_path = get_path(
+        'output', 'stylish_empty_file_vs_arf_file2.txt'
+    )
+    plain_expected_path = get_path(
+        'output', 'plain_empty_file_vs_arf_file2.txt'
+    )
+
+    test_path1 = get_path('yaml', 'empty_file.yml')
+    test_path2 = get_path('json', 'arf_file2.json')
+
+    with open(stylish_expected_path, 'r') as st_file:
+        expected_result = st_file.read()
+        function_result = generate_diff(test_path1, test_path2, 'stylish')
+        assert function_result == expected_result
+
+    with open(plain_expected_path, 'r') as pl_file:
+        expected_result = pl_file.read()
+        function_result = generate_diff(test_path1, test_path2, 'plain')
+        assert function_result == expected_result

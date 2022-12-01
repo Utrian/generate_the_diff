@@ -1,0 +1,4 @@
+Property 'common' was added with value: [complex value]
+Property 'group1' was added with value: [complex value]
+Property 'group3' was added with value: [complex value]
+Property 'group4' was added with value: [complex value]
