@@ -36,10 +36,8 @@ def yaml_second_file():
 
 
 def test_get_parsed_data(
-                        json_first_file,
-                        json_second_file,
-                        yaml_first_file,
-                        yaml_second_file,
+    json_first_file, json_second_file,
+    yaml_first_file, yaml_second_file
 ):
     json1_path = 'tests/fixtures/json/first_file.json'
     json2_path = 'tests/fixtures/json/second_file.json'

@@ -1,11 +1,6 @@
 import os
 import pytest
 from gendiff.gendiff_with_formatter import generate_diff
-from gendiff.gendiff_engine import build_diff
-from gendiff.file_parser import get_parsed_data
-import gendiff.formatters.stylish as ft_stylish
-import gendiff.formatters.plain as ft_plain
-import gendiff.formatters.json as ft_json
 
 
 def get_path(parent, file):
