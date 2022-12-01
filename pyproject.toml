@@ -2,9 +2,18 @@
 name = "hexlet-code"
 version = "1.0.0"
 description = ""
-authors = ["Paul Nikolaevskiy <paulnikolaevsky@gmail.com>"]
+authors = [
+	"Paul Nikolaevskiy <paulnikolaevsky@gmail.com>"
+]
 packages = [
 	{ include = "gendiff" },
+]
+repository = "https://github.com/Utrian/python-project-50"
+
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Programming Language :: Python :: 3.8",
+	"Operating System :: OS Independent"
 ]
 
 [tool.poetry.dependencies]
