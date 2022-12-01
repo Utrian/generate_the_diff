@@ -15,7 +15,7 @@ def get_formatter(ft_name: str):
     return ft[ft_name]
 
 
-def generate_diff(path_file1, path_file2, formatter_name):
+def generate_diff(path_file1, path_file2, formatter_name='stylish'):
     formatter = get_formatter(formatter_name)
     file_1, file_2 = file_parser.get_parsed_data(path_file1, path_file2)
 
