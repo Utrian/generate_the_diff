@@ -73,25 +73,3 @@ def test_generate_diff_mix_file_types():
         expected_result = pl_file.read()
         function_result = generate_diff(test_path1, test_path2, 'plain')
         assert function_result == expected_result
-
-
-def test_generate_diff_with_empty_file():
-    stylish_expected_path = tools.get_fixture_file_path(
-        'output', 'stylish_empty_file_vs_arf_file2.txt'
-    )
-    plain_expected_path = tools.get_fixture_file_path(
-        'output', 'plain_empty_file_vs_arf_file2.txt'
-    )
-
-    test_path1 = tools.get_fixture_file_path('yaml', 'empty_file.yml')
-    test_path2 = tools.get_fixture_file_path('json', 'arf_file2.json')
-
-    with open(stylish_expected_path, 'r') as st_file:
-        expected_result = st_file.read()
-        function_result = generate_diff(test_path1, test_path2, 'stylish')
-        assert function_result == expected_result
-
-    with open(plain_expected_path, 'r') as pl_file:
-        expected_result = pl_file.read()
-        function_result = generate_diff(test_path1, test_path2, 'plain')
-        assert function_result == expected_result

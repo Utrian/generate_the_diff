@@ -7,12 +7,8 @@ def get_parsed_data(path_file):
 
     if file_format in ('json', 'yaml', 'yml'):
         if file_format == 'json':
-            try:
-                parsed_data = json.load(open(path_file))
-                return parsed_data
-
-            except json.JSONDecodeError:
-                return {}
+            parsed_data = json.load(open(path_file))
+            return parsed_data
 
         elif file_format in ('yaml', 'yml'):
             parsed_data = yaml.safe_load(open(path_file))
