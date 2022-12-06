@@ -1,7 +1,11 @@
 from argparse import ArgumentParser
+from .tools import get_fixture_file_path
 
 
 def get_args():
+    file1_path = get_fixture_file_path('json', 'arf_file1.json')
+    file2_path = get_fixture_file_path('json', 'arf_file2.json')
+
     parser = ArgumentParser(
         description='Compares two '
         'configuration files and shows a difference.'
@@ -9,12 +13,12 @@ def get_args():
     parser.add_argument(
         'first_file',
         nargs='?', type=str,
-        default='files/json/first_file.json'
+        default=file1_path
     )
     parser.add_argument(
         'second_file',
         nargs='?', type=str,
-        default='files/json/second_file.json'
+        default=file2_path
     )
     parser.add_argument(
         '-f', '--format',

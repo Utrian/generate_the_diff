@@ -28,7 +28,7 @@ flake8 = "^5.0.4"
 ipykernel = "^6.16.0"
 
 [tool.poetry.scripts]
-gendiff = "gendiff.scripts.gendiff:main"
+gendiff = "gendiff.scripts.start_generate_diff:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,3 +1,4 @@
+from typing import List
 from .tools import (
     get_value, is_unchanged_items,
     is_changed_items, is_nested_structure,
@@ -6,7 +7,7 @@ from .tools import (
 )
 
 
-def external_walk(dict_):
+def external_walk(dict_) -> List[dict]:
     diff = list()
     all_keys = [key for key in dict_]
 
@@ -26,7 +27,7 @@ def external_walk(dict_):
     return diff
 
 
-def build_diff(file_1: dict, file_2: dict):
+def build_diff(file_1: dict, file_2: dict) -> List[dict]:
     diff = list()
 
     all_keys = sorted(

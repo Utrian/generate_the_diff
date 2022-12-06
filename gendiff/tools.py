@@ -1,3 +1,11 @@
+import os
+
+
+def get_fixture_file_path(format, file_name):
+    file_path = os.path.abspath(os.path.join('tests', 'fixtures', format, file_name))
+    return file_path
+
+
 def normalize_bool(value, mode='not_plain'):
     if type(value) is bool:
         if value is True:
