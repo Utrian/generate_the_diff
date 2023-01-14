@@ -1,5 +1,5 @@
 import pytest
-from gendiff import tools
+import conftest
 from gendiff.gendiff_with_formatter import generate_diff
 
 
@@ -44,10 +44,10 @@ def test_generate_diff(
     fixture_format, test_file1,
     test_file2, formatter, expected
 ):
-    expected_path = tools.get_fixture_file_path('output', expected)
+    expected_path = conftest.get_fixture_file_path('output', expected)
     with open(expected_path, 'r') as f:
-        test_path1 = tools.get_fixture_file_path(fixture_format, test_file1)
-        test_path2 = tools.get_fixture_file_path(fixture_format, test_file2)
+        test_path1 = conftest.get_fixture_file_path(fixture_format, test_file1)
+        test_path2 = conftest.get_fixture_file_path(fixture_format, test_file2)
 
         expected_result = f.read()
         function_result = generate_diff(test_path1, test_path2, formatter)
@@ -55,20 +55,20 @@ def test_generate_diff(
 
 
 def test_generate_diff_mix_file_types():
-    stylish_expected_path = tools.get_fixture_file_path('output', 'arf_result_stylish')
-    plain_expected_path = tools.get_fixture_file_path('output', 'arf_result_plain')
+    stylish_expected_path = conftest.get_fixture_file_path('output', 'arf_result_stylish')
+    plain_expected_path = conftest.get_fixture_file_path('output', 'arf_result_plain')
 
     with open(stylish_expected_path, 'r') as st_file:
-        test_path1 = tools.get_fixture_file_path('json', 'arf_file1.json')
-        test_path2 = tools.get_fixture_file_path('yaml', 'arf_file2.yml')
+        test_path1 = conftest.get_fixture_file_path('json', 'arf_file1.json')
+        test_path2 = conftest.get_fixture_file_path('yaml', 'arf_file2.yml')
 
         expected_result = st_file.read()
         function_result = generate_diff(test_path1, test_path2, 'stylish')
         assert function_result == expected_result
 
     with open(plain_expected_path, 'r') as pl_file:
-        test_path1 = tools.get_fixture_file_path('yaml', 'arf_file1.yml')
-        test_path2 = tools.get_fixture_file_path('json', 'arf_file2.json')
+        test_path1 = conftest.get_fixture_file_path('yaml', 'arf_file1.yml')
+        test_path2 = conftest.get_fixture_file_path('json', 'arf_file2.json')
 
         expected_result = pl_file.read()
         function_result = generate_diff(test_path1, test_path2, 'plain')

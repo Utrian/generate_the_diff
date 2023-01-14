@@ -1,4 +1,25 @@
-from gendiff.tools import get_value, get_status
+def get_status(status: str):
+    statuses = {
+        'added': '  + ',
+        'deleted': '  - ',
+        'nested': '    ',
+        'unchanged': '    '
+    }
+    return statuses[status]
+
+
+def get_normalize_value(items: dict, key: str):
+    value = items[key]
+
+    if type(value) is bool:
+        if value is True:
+            return 'true'
+        return 'false'
+
+    elif value is None:
+        return 'null'
+
+    return value
 
 
 def write_line(indent, type, key, value):
@@ -14,7 +35,8 @@ def write_close_bracket(indent='', default_indent=0):
     return f"{close_bracket}"
 
 
-def stylish(diff: list):
+def stylish(tree: list):
+    diff = tree['children']
     spaces = "    "
     open_bracket = '{'
     default_indent = 4
@@ -23,16 +45,16 @@ def stylish(diff: list):
 
     def walk(diff, depth=0):
         for internal_view in diff:
-            key = get_value(internal_view, 'key')
-            type = get_value(internal_view, 'type')
+            key = get_normalize_value(internal_view, 'key')
+            type = get_normalize_value(internal_view, 'type')
             indent = spaces * depth
 
             if 'value' in internal_view:
-                value = get_value(internal_view, 'value')
+                value = get_normalize_value(internal_view, 'value')
                 formatted_diff.append(write_line(indent, type, key, value))
 
             elif 'children' in internal_view and type != 'changed':
-                children = get_value(internal_view, 'children')
+                children = get_normalize_value(internal_view, 'children')
 
                 formatted_diff.append(write_line(indent, type, key, open_bracket))
                 walk(children, depth + 1)
@@ -46,7 +68,7 @@ def stylish(diff: list):
             type2 = 'added'
 
             if 'value1' in internal_view:
-                value1 = get_value(internal_view, 'value1')
+                value1 = get_normalize_value(internal_view, 'value1')
                 formatted_diff.append(write_line(indent, type1, key, value1))
 
             if 'children' in internal_view:
@@ -55,7 +77,7 @@ def stylish(diff: list):
                 if 'value1' in internal_view:
                     child_type = type2
 
-                children = get_value(internal_view, 'children')
+                children = get_normalize_value(internal_view, 'children')
                 closing_bracket_indent = ' ' * (len(indent) + default_indent)
                 close_bracket = f"{closing_bracket_indent}{'}'}"
 
@@ -66,7 +88,7 @@ def stylish(diff: list):
                 formatted_diff.append(f"{close_bracket}")
 
             if 'value2' in internal_view:
-                value2 = get_value(internal_view, 'value2')
+                value2 = get_normalize_value(internal_view, 'value2')
 
                 formatted_diff.append(write_line(indent, type2, key, value2))
 

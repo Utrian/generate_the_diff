@@ -1,44 +1,5 @@
-import os
-
-
-def get_fixture_file_path(format, file_name):
-    file_path = os.path.abspath(os.path.join('tests', 'fixtures', format, file_name))
-    return file_path
-
-
-def normalize_bool(value, mode='not_plain'):
-    if type(value) is bool:
-        if value is True:
-            return 'true'
-        return 'false'
-
-    elif value is None:
-        return 'null'
-
-    if mode == 'plain':
-        if isinstance(value, list):
-            return '[complex value]'
-
-        elif value in ('true', 'false', 'null', 0):
-            return value
-
-        return f"'{value}'"
-
-    return value
-
-
 def get_value(items: dict, key: str):
     return items[key]
-
-
-def get_status(status: str):
-    statuses = {
-        'added': '  + ',
-        'deleted': '  - ',
-        'nested': '    ',
-        'unchanged': '    '
-    }
-    return statuses[status]
 
 
 def is_nested_structure(value, *dictionaries):
