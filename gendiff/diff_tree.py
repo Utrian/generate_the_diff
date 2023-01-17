@@ -1,29 +1,4 @@
 from typing import List
-from .diff_tree_tools import (
-    get_value, is_unchanged_items, is_changed_items,
-    is_nested_structure, make_nested_structure,
-    make_leaf_structure, make_changed_structure
-)
-
-
-def external_walk(dict_) -> List[dict]:
-    diff = list()
-    all_keys = [key for key in dict_]
-
-    for key in all_keys:
-        if is_nested_structure(key, dict_):
-            child = get_value(dict_, key)
-            children = external_walk(child)
-
-            diff.append(make_nested_structure(key, 'unchanged', children))
-
-            continue
-
-        value = get_value(dict_, key)
-
-        diff.append(make_leaf_structure(key, 'unchanged', value))
-
-    return diff
 
 
 def build_diff(data1: dict, data2: dict) -> List[dict]:
@@ -34,62 +9,43 @@ def build_diff(data1: dict, data2: dict) -> List[dict]:
     )
 
     for key in all_keys:
+        if key not in data2:
+            diff.append({
+                'key': key,
+                'type': 'deleted',
+                'value': data1[key]
+            })
 
-        if is_nested_structure(key, data1, data2):
-            child1 = get_value(data1, key)
-            child2 = get_value(data2, key)
+        elif key not in data1:
+            diff.append({
+                'key': key,
+                'type': 'added',
+                'value': data2[key]
+            })
 
-            children = build_diff(child1, child2)
+        elif isinstance(data1[key], dict) and isinstance(data2[key], dict):
+            children = build_diff(data1[key], data2[key])
 
-            diff.append(make_nested_structure(key, 'nested', children))
+            diff.append({
+                'key': key,
+                'type': 'nested',
+                'children': children
+            })
 
-        elif is_unchanged_items(data1, data2, key):
-            value = get_value(data1, key)
+        elif data1[key] != data2[key]:
+            diff.append({
+                'key': key,
+                'type': 'changed',
+                'value1': data1[key],
+                'value2': data2[key]
+            })
 
-            diff.append(make_leaf_structure(key, 'unchanged', value))
-
-        elif is_changed_items(data1, data2, key):
-            values = list()
-
-            if is_nested_structure(key, data1):
-                children = external_walk(get_value(data1, key))
-                values.append(children)
-
-            else:
-                value1 = get_value(data1, key)
-                values.append(value1)
-
-            if is_nested_structure(key, data2):
-                children = external_walk(get_value(data2, key))
-                values.append(children)
-
-            else:
-                value2 = get_value(data2, key)
-                values.append(value2)
-
-            diff.append(make_changed_structure(key, values))
-
-        elif key in data1:
-            if is_nested_structure(key, data1):
-                children = external_walk(get_value(data1, key))
-
-                diff.append(make_nested_structure(key, 'deleted', children))
-
-            else:
-                value = get_value(data1, key)
-
-                diff.append(make_leaf_structure(key, 'deleted', value))
-
-        elif key in data2:
-            if is_nested_structure(key, data2):
-                children = external_walk(get_value(data2, key))
-
-                diff.append(make_nested_structure(key, 'added', children))
-
-            else:
-                value = get_value(data2, key)
-
-                diff.append(make_leaf_structure(key, 'added', value))
+        else:
+            diff.append({
+                'key': key,
+                'type': 'unchanged',
+                'value': data1[key]
+            })
 
     return diff
 

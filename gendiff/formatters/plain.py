@@ -17,7 +17,7 @@ def get_value(items: dict, key: str):
 
 
 def get_normolize_value(value):
-    if isinstance(value, list):
+    if isinstance(value, dict):
         return '[complex value]'
 
     elif value in ('true', 'false', 'null', 0):
@@ -36,7 +36,7 @@ def make_message(ancestry, type, value: Union[any, list]):
         value2 = get_normolize_value(value2)
         message = f'{common_part} updated. From {value1} to {value2}'
         return message
-    
+
     value = get_normolize_value(value)
 
     if type == 'added':
@@ -64,28 +64,17 @@ def plain(tree: list):
                 walk(children, cur_ancestry)
 
             elif type == 'changed':
-                values = []
-
-                if 'value1' in internal_view:
-                    values.append(get_value(internal_view, 'value1'))
-
-                if 'children' in internal_view:
-                    values.append(get_value(internal_view, 'children'))
-
-                if 'value2' in internal_view:
-                    values.append(get_value(internal_view, 'value2'))
+                values = [
+                    get_value(internal_view, 'value1'),
+                    get_value(internal_view, 'value2')
+                ]
 
                 formatted_diff.append(
                     make_message(cur_ancestry, type, values)
                 )
 
             elif type in ('added', 'deleted'):
-                if 'value' in internal_view:
-                    value = get_value(internal_view, 'value')
-
-                elif 'children' in internal_view:
-                    value = get_value(internal_view, 'children')
-
+                value = get_value(internal_view, 'value')
                 formatted_diff.append(
                     make_message(cur_ancestry, type, value)
                 )
