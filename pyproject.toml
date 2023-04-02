@@ -8,7 +8,7 @@ authors = [
 packages = [
 	{ include = "gendiff" },
 ]
-repository = "https://github.com/Utrian/python-project-50"
+repository = "https://github.com/Utrian/generate_the_diff"
 
 classifiers = [
 	"Development Status :: 5 - Production/Stable",
