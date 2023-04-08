@@ -14,7 +14,14 @@ The output type depends on the selected format:
 ```bash
 git clone https://github.com/Utrian/generate_the_diff
 cd generate_the_diff
+
+#If you are using docker:
+docker build .
+docker run -it [image] #That`s all.
+
+#Or:
 make install
+poetry shell
 ```
 
 ## Help
