@@ -20,8 +20,8 @@ docker build .
 docker run -it [image] #That`s all.
 
 #Or:
-make install
 poetry shell
+make install
 ```
 
 ## Help
