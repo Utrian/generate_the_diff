@@ -56,7 +56,7 @@ gendiff -f stylish files/json/first_file.json files/yaml/second_file.yaml
 
 ### **Stylish format mode**
 
-*The conditional both-values:*
+*legend:*
 symbol | description
 :------|:------------
 \-     | if the parameter was deleted from the first file;
